@@ -9,6 +9,7 @@ namespace DiagramsModel
 						where EType : IEnumType
 						where DType : IScopeSelectionItem
 	{
+		public int Count => EnumValues.Count();
 		public bool IsEmpty => TotalSum == 0;
 		public DateTime InitialDate { get; }
 		public DateTime? FinalDate { get; }

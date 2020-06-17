@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Histogram;
 
 namespace Statistic
 {
@@ -31,21 +32,29 @@ namespace Statistic
 
 		private void Initialize()
 		{
-			var scopes = new Scopes<StatEnumItem, ValueItem>(GetEnums,)
+			var scopes = new Scopes<StatEnumItem, ValueItem>(GetEnums, GetValues, DateTime.Today, null);
+			var diagram = new HistoDiagram(scopes);
+			MainGrid.Children.Add(diagram);
 		}
 
 		private IEnumerable<ValueItem> GetValues(StatEnumItem enumItem, DateTime initial, DateTime? final)
 		{
 			var data = new List<ValueItem>()
 			{
-				new ValueItem()
+				new ValueItem(16,new StatEnumItem("Jopa")),
+				new ValueItem(26,new StatEnumItem("Jopa")),
+				new ValueItem(76,new StatEnumItem("Pupa")),
+				new ValueItem(36,new StatEnumItem("Pupa")),
+				new ValueItem(96,new StatEnumItem("Lupa")),
 			};
+
+			return data.Where(x => x.EnumType.Equals(enumItem));
 		}
 
 		private IEnumerable<StatEnumItem> GetEnums()
 		{
 			return new List<StatEnumItem>()
-			{ 
+			{
 				new StatEnumItem("Jopa"),
 				new StatEnumItem("Pupa"),
 				new StatEnumItem("Lupa"),

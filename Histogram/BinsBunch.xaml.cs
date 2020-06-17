@@ -24,9 +24,10 @@ namespace Histogram
 		/// <summary>
 		/// Height of Y-axis
 		/// </summary>
-		double YMaxScale => 0.95 * ActualHeight;
+		double YMaxScale => 0.95 * 300;
 		public const int GapsAmount = 10;
 
+		//TODO: bind to Height
 		List<Bin> Bins = new List<Bin>();
 
 		public BinsBunch(Scopes<StatEnumItem, ValueItem> scopes)
@@ -36,18 +37,33 @@ namespace Histogram
 			Initialize(scopes);
 		}
 
+		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 		//TODO: add case if all items are negative
 		private void Initialize(Scopes<StatEnumItem, ValueItem> scopes)
 		{
-			var generalShift = Bin.BinsWidth;
-			foreach (var scope in scopes)
+			for (int i = 0; i < scopes.Count; i++)
 			{
-				var b = new Bin(scope.Ratio * YMaxScale);
-				b.Shift(generalShift);
-				generalShift += Bin.BinsWidth;
+				var b = new Bin(i, scopes[i].Ratio * YMaxScale)
+				{
+					Color = brushes[i],
+				};
+				b.MouseOn += Bin_MouseOn;
+				b.MouseOut += Bin_MouseOut;
+
+				b.Shift();
 				Bins.Add(b);
 				MainGrid.Children.Add(b);
 			}
+		}
+
+		private void Bin_MouseOut(Bin sender)
+		{
+			Panel.SetZIndex(sender, 1);
+		}
+
+		private void Bin_MouseOn(Bin sender)
+		{
+			Panel.SetZIndex(sender, 100);
 		}
 
 		///According to Max and ratio create Bin(Height=MaxHeight*Ratio)

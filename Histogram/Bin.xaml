@@ -6,10 +6,15 @@
              xmlns:local="clr-namespace:Histogram"
              mc:Ignorable="d" 
              x:Name="ctrl"
-             d:DesignWidth="114.375" d:DesignHeight="138.75">
+             d:DesignWidth="114.375" d:DesignHeight="138.75"
+             Margin="0">
     <Rectangle x:Name="MainRect"
                MouseEnter="MainRect_MouseEnter"
                MouseLeave="MainRect_MouseLeave"
+               StrokeThickness="1"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               Stroke="Black"
                Width="{Binding ElementName=ctrl,Path=BinsWidth}">
         <Rectangle.RenderTransform>
             <RotateTransform x:Name="rotateTransform"

@@ -20,7 +20,7 @@ namespace Histogram
 	/// </summary>
 	public partial class HistoDiagram : UserControl
 	{
-		private const int BunchesSpace = 30;
+		private const int BunchesSpace = 20;
 
 
 		public HistoDiagram(params Scopes<StatEnumItem, ValueItem>[] scopesCollection)
