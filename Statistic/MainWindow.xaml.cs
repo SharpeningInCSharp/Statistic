@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DiagramsModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -23,6 +25,31 @@ namespace Statistic
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			var scopes = new Scopes<StatEnumItem, ValueItem>(GetEnums,)
+		}
+
+		private IEnumerable<ValueItem> GetValues(StatEnumItem enumItem, DateTime initial, DateTime? final)
+		{
+			var data = new List<ValueItem>()
+			{
+				new ValueItem()
+			};
+		}
+
+		private IEnumerable<StatEnumItem> GetEnums()
+		{
+			return new List<StatEnumItem>()
+			{ 
+				new StatEnumItem("Jopa"),
+				new StatEnumItem("Pupa"),
+				new StatEnumItem("Lupa"),
+			};
 		}
 	}
 }

@@ -60,7 +60,7 @@ namespace DiagramsModel
 		{
 			foreach (var item in scopes)
 			{
-				item.Ratio = item.Sum / TotalSum;
+				item.Ratio = (double)(item.Sum / TotalSum);
 			}
 		}
 	}

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:Histogram"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="White">
+    <Grid Background="White"
+          x:Name="DiagramGrid">
         <Path x:Name="xAxis" Stroke="Black"
               Data="M10,10 h 800
               M10,20 v20"/>

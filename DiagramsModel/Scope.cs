@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DiagramsModel
 {
@@ -12,7 +10,7 @@ namespace DiagramsModel
 	{
 		public decimal Sum => Items.Sum(x => x.GetTotal);
 
-		public decimal Ratio { get; internal set; } = 0;
+		public double Ratio { get; internal set; } = 0;
 
 		public EType EnumMember { get; internal set; }
 

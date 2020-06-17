@@ -63,7 +63,7 @@ namespace Histogram
 		/// Shifts object right for <paramref name="shiftValue"/>
 		/// </summary>
 		/// <param name="shiftValue">value to be shifted</param>
-		public void Shift(int shiftValue)
+		public void Shift(double shiftValue)
 		{
 			Margin = new Thickness(shiftValue, 0, 0, 0);
 		}

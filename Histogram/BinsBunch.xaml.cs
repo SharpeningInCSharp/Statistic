@@ -1,6 +1,8 @@
 ﻿using DiagramsModel;
+using Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,23 +21,33 @@ namespace Histogram
 	/// </summary>
 	public partial class BinsBunch : UserControl
 	{
-		///YMaxScale = Height of Y-axis
+		/// <summary>
+		/// Height of Y-axis
+		/// </summary>
+		double YMaxScale => 0.95 * ActualHeight;
+		public const int GapsAmount = 10;
 
 		List<Bin> Bins = new List<Bin>();
 
-		public BinsBunch()
+		public BinsBunch(Scopes<StatEnumItem, ValueItem> scopes)
 		{
 			InitializeComponent();
 
-			Initialize();
+			Initialize(scopes);
 		}
 
 		//TODO: add case if all items are negative
-		private void Initialize()
+		private void Initialize(Scopes<StatEnumItem, ValueItem> scopes)
 		{
-			///foreach var item in scopes
-			///var b = new Bin(YMaxScale*item.Ratio);
-			///bins.Add(bin)
+			var generalShift = Bin.BinsWidth;
+			foreach (var scope in scopes)
+			{
+				var b = new Bin(scope.Ratio * YMaxScale);
+				b.Shift(generalShift);
+				generalShift += Bin.BinsWidth;
+				Bins.Add(b);
+				MainGrid.Children.Add(b);
+			}
 		}
 
 		///According to Max and ratio create Bin(Height=MaxHeight*Ratio)

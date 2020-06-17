@@ -6,11 +6,15 @@ namespace Model
 {
 	public partial class ValueItem
 	{
-		public ValueItem(decimal value)
+		public ValueItem(decimal value, StatEnumItem statEnum)
 		{
 			if (DataValidation.IsValueValid(value) == false)
 				throw new ArgumentException($"{nameof(value)} is invalid {value}. Probably it's too big");
 
+			if (statEnum is null)
+				throw new ArgumentNullException($"{nameof(statEnum)} can't be null!");
+
+			EnumType = statEnum;
 			GetTotal = value;
 		}
 
@@ -47,9 +51,11 @@ namespace Model
 	{
 		public decimal GetTotal { get; }
 
+		public IEnumType EnumType { get; }
+
 		public bool Equals([AllowNull] ValueItem other)
 		{
-			return GetTotal == other.GetTotal;
+			return GetTotal == other.GetTotal && EnumType.Equals(other.EnumType);
 		}
 	}
 }

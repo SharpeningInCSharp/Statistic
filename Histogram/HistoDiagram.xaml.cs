@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiagramsModel;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,11 +23,22 @@ namespace Histogram
 		private const int BunchesSpace = 30;
 
 
-		public HistoDiagram()
+		public HistoDiagram(params Scopes<StatEnumItem, ValueItem>[] scopesCollection)
 		{
 			InitializeComponent();
+
+			OnInitialized(scopesCollection);
 		}
 
+		private void OnInitialized(params Scopes<StatEnumItem, ValueItem>[] scopesCollection)
+		{
+			//TODO: logic to shiftBunch
+			foreach (var scopes in scopesCollection)
+			{
+				var b = new BinsBunch(scopes);
+				DiagramGrid.Children.Add(b);
+			}
+		}
 
 		///Find Max value, and max Y-value will be a bit bigger
 		///can be created using Scopes or Scopes[]
