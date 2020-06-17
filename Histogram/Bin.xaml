@@ -10,5 +10,11 @@
     <Rectangle x:Name="MainRect"
                MouseEnter="MainRect_MouseEnter"
                MouseLeave="MainRect_MouseLeave"
-               Width="{Binding ElementName=ctrl,Path=BinsWidth}"/>
+               Width="{Binding ElementName=ctrl,Path=BinsWidth}">
+        <Rectangle.RenderTransform>
+            <RotateTransform x:Name="rotateTransform"
+                             Angle="0"
+                             CenterX="0" CenterY="0"/>
+        </Rectangle.RenderTransform>
+    </Rectangle>
 </UserControl>

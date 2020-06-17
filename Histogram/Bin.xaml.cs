@@ -10,7 +10,33 @@ namespace Histogram
 	/// </summary>
 	public partial class Bin : UserControl
 	{
+		/// <summary>
+		/// Width of item
+		/// </summary>
 		public const int BinsWidth = 20;
+
+		private const int RotationNegativeAngle = 180;
+		private const int RotationPositiveAngle = 0;
+
+		/// <summary>
+		/// Indicates is value of Bin negative
+		/// </summary>
+		public bool IsNegative
+		{
+			get => rotateTransform.Angle == RotationNegativeAngle;
+
+			set
+			{
+				if (value)
+				{
+					rotateTransform.Angle = RotationNegativeAngle;
+				}
+				else
+				{
+					rotateTransform.Angle = RotationPositiveAngle;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Current bin's color
@@ -42,7 +68,7 @@ namespace Histogram
 			Margin = new Thickness(shiftValue, 0, 0, 0);
 		}
 
-		//I can Light value either draw dotted line to this value or smth
+		//TODO: I can Light value either draw dotted line to this value or smth
 		private void MainRect_MouseEnter(object sender, MouseEventArgs e)
 		{
 

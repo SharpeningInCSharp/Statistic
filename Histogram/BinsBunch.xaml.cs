@@ -30,6 +30,7 @@ namespace Histogram
 			Initialize();
 		}
 
+		//TODO: add case if all items are negative
 		private void Initialize()
 		{
 			///foreach var item in scopes
