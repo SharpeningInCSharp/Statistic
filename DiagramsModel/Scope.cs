@@ -37,7 +37,7 @@ namespace DiagramsModel
 		}
 	}
 
-	public partial class Scope<EType, DType> : IMaxMinDiagramStat
+	public partial class Scope<EType, DType> : IMaxMinDiagramStat, IPairOutputStringData
 	{
 		public decimal Min => Items.Min(x=>x.GetTotal);
 
@@ -48,16 +48,16 @@ namespace DiagramsModel
 			return $"{EnumMember} {Sum:C2} ({Ratio:P2})";
 		}
 
-		///// <summary>
-		///// Using Handler output line by line items
-		///// </summary>
-		///// <param name="OutputHandler"></param>
-		//public void OutputData(Action<string, string> OutputHandler)
-		//{
-		//	foreach (var item in Items)
-		//	{
-		//		OutputHandler?.Invoke(item.ToString(), item.GetTotal.ToString("C2"/*,CultureInfo.CreateSpecificCulture()*/));
-		//	}
-		//}
+		/// <summary>
+		/// Using Handler output line by line items
+		/// </summary>
+		/// <param name="OutputHandler"></param>
+		public void OutputData(Action<string, string> OutputHandler)
+		{
+			foreach (var item in Items)
+			{
+				OutputHandler?.Invoke(item.ToString(), item.GetTotal.ToString("C2"/*,CultureInfo.CreateSpecificCulture()*/));
+			}
+		}
 	}
 }

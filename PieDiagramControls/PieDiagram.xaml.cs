@@ -1,5 +1,9 @@
-﻿using System;
+﻿using DiagramsDataOutput;
+using DiagramsModel;
+using Model;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,10 +29,10 @@ namespace PieDiagramControls
 		private readonly List<PiePiece> piePieces = new List<PiePiece>();
 		private const int FullAngle = 360;
 
-		public Scopes<GoodType, PurchaseItem> Scopes { get; private set; }
+		public Scopes<StatEnumItem, ValueItem> Scopes { get; private set; }
 		public SolidColorBrush[] UsersBrushes { get; }
 
-		public PieDiagram(Scopes<GoodType, PurchaseItem> scopes, SolidColorBrush[] brushes)
+		public PieDiagram(Scopes<StatEnumItem, ValueItem> scopes, SolidColorBrush[] brushes)
 		{
 			if (scopes is null)
 				throw new ArgumentNullException($"{nameof(scopes)} was null!");
@@ -48,7 +52,7 @@ namespace PieDiagramControls
 			ShowGeneralInfo();
 		}
 
-		public void LoadNew(Scopes<GoodType, PurchaseItem> scopes)
+		public void LoadNew(Scopes<StatEnumItem, ValueItem> scopes)
 		{
 			ClearPie();
 
@@ -110,8 +114,8 @@ namespace PieDiagramControls
 		{
 			piePieceHeaderTextBlock.Text = "General info";
 
+			//TODO: edit DiagramInfo interraction - set new Header FontSize and remove piePieceHeaderTextBlock
 			DiagramInfo.Clear();
-			DiagramInfo.Note = "Here are the most expensive items";
 			DiagramInfo.Header = Scopes.TotalSum.ToString("C2");
 			Scopes.OutputData((col1, col2) => DiagramInfo.Add(col1, col2));
 		}

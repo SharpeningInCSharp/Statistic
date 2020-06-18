@@ -66,7 +66,7 @@ namespace DiagramsModel
 		}
 	}
 
-	public partial class Scopes<EType, DType> : IEnumerable<Scope<EType, DType>>, IEnumerable
+	public partial class Scopes<EType, DType> : IEnumerable<Scope<EType, DType>>, IEnumerable, IPairOutputStringData
 	{
 		IEnumerator IEnumerable.GetEnumerator()
 		{
@@ -97,20 +97,20 @@ namespace DiagramsModel
 			return scopes.GetEnumerator();
 		}
 
-		///// <summary>
-		///// Returns top-3 the most expensive items in each category
-		///// </summary>
-		///// <param name="OutputHandler">Handler for output</param>
-		//public void OutputData(Action<string, string> OutputHandler)
-		//{
-		//	var categories = scopes.Select(x => x.GetTopExpensive());
-		//	foreach (var category in categories)
-		//	{
-		//		foreach (var item in category)
-		//		{
-		//			OutputHandler?.Invoke(item.ToString(), item.GetTotal.ToString("C2"));
-		//		}
-		//	}
-		//}
+		/// <summary>
+		/// Returns top-3 the most expensive items in each category
+		/// </summary>
+		/// <param name="OutputHandler">Handler for output</param>
+		public void OutputData(Action<string, string> OutputHandler)
+		{
+			var categories = scopes.Select(x => x.GetTopExpensive());
+			foreach (var category in categories)
+			{
+				foreach (var item in category)
+				{
+					OutputHandler?.Invoke(item.ToString(), item.GetTotal.ToString("C2"));
+				}
+			}
+		}
 	}
 }
