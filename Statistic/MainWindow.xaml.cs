@@ -33,9 +33,11 @@ namespace Statistic
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 		private void Initialize()
 		{
+			//TODO: extract common from diagrams
+			//TODO: should I extend IScopeSelectionItem interface or create some other with DateTime
 			var scopes = new Scopes(GetEnums, GetValues, DateTime.Today, null);
-			var hdiagram = new HistoDiagram(scopes);
-			var pDiagram = new PieDiagram(scopes,brushes);
+			var hdiagram = new HistoDiagram(brushes, scopes);
+			var pDiagram = new PieDiagram(scopes, brushes);
 			MainGrid.Children.Add(hdiagram);
 		}
 

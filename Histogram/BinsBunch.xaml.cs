@@ -1,5 +1,4 @@
 ﻿using DiagramsModel;
-using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,40 +20,47 @@ namespace Histogram
 	/// </summary>
 	public partial class BinsBunch : UserControl
 	{
-		/// <summary>
-		/// Height of Y-axis
-		/// </summary>
-		double YMaxScale => 0.95 * 300;
-
 		//TODO: should get Y/X-Scales thought ctor
 		//TODO: bind to Height
 		List<Bin> Bins = new List<Bin>();
 
-		public BinsBunch(Scopes scopes)
+		public delegate double CalcultateHeightHandler(decimal currentValue);
+
+		public BinsBunch(Scopes scopes, Brush[] brushes, CalcultateHeightHandler calcultateHeightHandler)
 		{
+			if (scopes is null)
+			{
+				throw new ArgumentNullException(nameof(scopes));
+			}
+
+			if (calcultateHeightHandler is null)
+			{
+				throw new ArgumentNullException(nameof(calcultateHeightHandler));
+			}
+
 			InitializeComponent();
 
-			Initialize(scopes);
+			this.brushes = brushes ?? throw new ArgumentNullException(nameof(brushes));
+			Initialize(scopes, calcultateHeightHandler);
 		}
 
 
-		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
+		private readonly Brush[] brushes;
 
-		
-		private void Initialize(Scopes scopes)
+		private void Initialize(Scopes scopes, CalcultateHeightHandler calcultateHeightHandler)
 		{
 			for (int i = 0; i < scopes.Count; i++)
 			{
-				var b = new Bin(i, scopes[i].Ratio * YMaxScale)
+				var bin = new Bin(i, calcultateHeightHandler.Invoke(scopes[i].Sum))
 				{
 					Color = brushes[i],
 				};
-				b.MouseOn += Bin_MouseOn;
-				b.MouseOut += Bin_MouseOut;
+				bin.MouseOn += Bin_MouseOn;
+				bin.MouseOut += Bin_MouseOut;
 
-				b.Shift();
-				Bins.Add(b);
-				MainGrid.Children.Add(b);
+				bin.Shift();
+				Bins.Add(bin);
+				MainGrid.Children.Add(bin);
 			}
 		}
 
