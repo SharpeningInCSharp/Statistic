@@ -50,7 +50,7 @@ namespace PieDiagramControls
 			InitializeComponent();
 		}
 
-		public PiePiece(int num, int ind, double angle, SolidColorBrush brush)
+		public PiePiece(int num, int ind, double angle, Brush brush)
 		{
 			InitializeComponent();
 			Num = num;

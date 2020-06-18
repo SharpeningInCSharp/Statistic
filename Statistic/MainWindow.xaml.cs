@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Histogram;
+using PieDiagramControls;
 
 namespace Statistic
 {
@@ -29,12 +30,13 @@ namespace Statistic
 
 			Initialize();
 		}
-
+		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 		private void Initialize()
 		{
 			var scopes = new Scopes<StatEnumItem, ValueItem>(GetEnums, GetValues, DateTime.Today, null);
-			var diagram = new HistoDiagram(scopes);
-			MainGrid.Children.Add(diagram);
+			var hdiagram = new HistoDiagram(scopes);
+			var pDiagram = new PieDiagram(scopes,brushes);
+			MainGrid.Children.Add(hdiagram);
 		}
 
 		private IEnumerable<ValueItem> GetValues(StatEnumItem enumItem, DateTime initial, DateTime? final)

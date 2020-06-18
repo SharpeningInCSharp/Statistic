@@ -10,6 +10,7 @@
     <ProjectReference Include="..\DiagramsModel\DiagramsModel.csproj" />
     <ProjectReference Include="..\Histogram\Histogram.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\PieDiagramControls\PieDiagramControls.csproj" />
   </ItemGroup>
 
 </Project>

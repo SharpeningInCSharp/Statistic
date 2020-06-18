@@ -30,9 +30,9 @@ namespace PieDiagramControls
 		private const int FullAngle = 360;
 
 		public Scopes<StatEnumItem, ValueItem> Scopes { get; private set; }
-		public SolidColorBrush[] UsersBrushes { get; }
+		public Brush[] UsersBrushes { get; }
 
-		public PieDiagram(Scopes<StatEnumItem, ValueItem> scopes, SolidColorBrush[] brushes)
+		public PieDiagram(Scopes<StatEnumItem, ValueItem> scopes, Brush[] brushes)
 		{
 			if (scopes is null)
 				throw new ArgumentNullException($"{nameof(scopes)} was null!");
