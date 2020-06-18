@@ -12,6 +12,7 @@
         <Border x:Name="ItemColor"
                 Height="30"
                 Width="30"
+                CornerRadius="180"
                 BorderBrush="Black"
                 MaxHeight="31" MaxWidth="31"
                 HorizontalAlignment="Center"

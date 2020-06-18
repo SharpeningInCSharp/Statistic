@@ -10,18 +10,7 @@ namespace DiagramsDataOutput
 	{
 		private Style TbStyle { get; }
 		private int itemsAmount = 0;
-
-		public string PreHeader { get; set; } = "Total sum: ";
-
-		public string Note
-		{
-			get => NoteTextBlock.Text;
-			set
-			{
-				NoteTextBlock.Visibility = Visibility.Visible;
-				NoteTextBlock.Text = value;
-			}
-		}
+		private const int UnitedColumnFontSize = 22;
 
 		public string Header
 		{
@@ -29,7 +18,7 @@ namespace DiagramsDataOutput
 			set
 			{
 				headerTexBlock.Visibility = Visibility.Visible;
-				headerTexBlock.Text = $"{PreHeader}{value}";
+				headerTexBlock.Text = value;
 			}
 		}
 
@@ -38,6 +27,25 @@ namespace DiagramsDataOutput
 			InitializeComponent();
 			TbStyle = FindResource("TextBlockStyle") as Style;
 			MainGrid.RowDefinitions.Add(new RowDefinition());
+		}
+
+		public void Add(string unitedColumn)
+		{
+			var columnTb = new TextBlock()
+			{
+				Text = unitedColumn,
+				Style = TbStyle,
+				FontWeight = FontWeights.Bold,
+				FontSize = UnitedColumnFontSize,
+				TextAlignment = TextAlignment.Left,
+			};
+
+			MainGrid.RowDefinitions.Add(new RowDefinition());
+
+			AddItemToGrid(columnTb, itemsAmount, 0);
+			Grid.SetColumnSpan(columnTb, 2);
+
+			itemsAmount++;
 		}
 
 		public void Add(string column1, string column2)
@@ -58,22 +66,23 @@ namespace DiagramsDataOutput
 
 			MainGrid.RowDefinitions.Add(new RowDefinition());
 
-			Grid.SetColumn(column1Tb, 0);
-			Grid.SetRow(column1Tb, itemsAmount);
-
-			Grid.SetColumn(column2Tb, 1);
-			Grid.SetRow(column2Tb, itemsAmount);
-
-			MainGrid.Children.Add(column1Tb);
-			MainGrid.Children.Add(column2Tb);
+			AddItemToGrid(column1Tb, itemsAmount, 0);
+			AddItemToGrid(column2Tb, itemsAmount, 1);
 
 			itemsAmount++;
+		}
+
+		private void AddItemToGrid(UIElement uIElement, int row, int column)
+		{
+			Grid.SetColumn(uIElement, column);
+			Grid.SetRow(uIElement, row);
+
+			MainGrid.Children.Add(uIElement);
 		}
 
 		public void Clear()
 		{
 			headerTexBlock.Visibility = Visibility.Collapsed;
-			NoteTextBlock.Visibility = Visibility.Collapsed;
 			itemsAmount = 0;
 
 			MainGrid.RowDefinitions.Clear();

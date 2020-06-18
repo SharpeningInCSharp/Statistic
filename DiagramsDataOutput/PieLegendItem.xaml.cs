@@ -19,10 +19,10 @@ namespace DiagramsDataOutput
 		private const double SelectedFontSize = 20;
 		private const int SelectedBorderThickness = 1;
 
-
 		public delegate void LegendHandler(int num);
 		public event LegendHandler MouseOn;
 		public event LegendHandler MouseOut;
+
 		public int Ind { get; }
 
 		public PieLegendItem(int i, Brush color, string title)
