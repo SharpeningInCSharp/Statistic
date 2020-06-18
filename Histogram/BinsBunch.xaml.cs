@@ -25,8 +25,8 @@ namespace Histogram
 		/// Height of Y-axis
 		/// </summary>
 		double YMaxScale => 0.95 * 300;
-		public const int GapsAmount = 10;
 
+		//TODO: should get Y/X-Scales thought ctor
 		//TODO: bind to Height
 		List<Bin> Bins = new List<Bin>();
 
@@ -37,8 +37,10 @@ namespace Histogram
 			Initialize(scopes);
 		}
 
+
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
-		//TODO: add case if all items are negative
+
+		
 		private void Initialize(Scopes<StatEnumItem, ValueItem> scopes)
 		{
 			for (int i = 0; i < scopes.Count; i++)
@@ -56,6 +58,11 @@ namespace Histogram
 			}
 		}
 
+		public void Shift(double left, double bottom)
+		{
+			Margin = new Thickness(left, 0, 0, bottom);
+		}
+
 		private void Bin_MouseOut(Bin sender)
 		{
 			Panel.SetZIndex(sender, 1);
@@ -65,7 +72,5 @@ namespace Histogram
 		{
 			Panel.SetZIndex(sender, 100);
 		}
-
-		///According to Max and ratio create Bin(Height=MaxHeight*Ratio)
 	}
 }
