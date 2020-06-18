@@ -5,19 +5,17 @@ using System.Linq;
 
 namespace DiagramsModel
 {
-	public partial class Scopes<EType, DType>
-						where EType : IEnumType
-						where DType : IScopeSelectionItem
+	public partial class Scopes
 	{
 		public int Count => EnumValues.Count();
 		public bool IsEmpty => TotalSum == 0;
 		public DateTime InitialDate { get; }
 		public DateTime? FinalDate { get; }
-		public IEnumerable<EType> EnumValues { get; }
+		public IEnumerable<IEnumType> EnumValues { get; }
 		public decimal TotalSum => scopes.Sum(x => x.Sum);
 		public int NotEmptyScopesAmount => scopes.Count() - scopes.Count(x => x.Sum == 0);
 
-		private readonly List<Scope<EType, DType>> scopes = new List<Scope<EType, DType>>();
+		private readonly List<Scope> scopes = new List<Scope>();
 
 		/// <summary>
 		/// Scope for range of dates
@@ -25,7 +23,7 @@ namespace DiagramsModel
 		/// <param name="dataProvider">Provides a way to get data according to curtain IEnumType and Dates range</param>
 		/// <param name="initialDate">Start of Date range</param>
 		/// <param name="finalDate">End of Date range</param>
-		public Scopes(Func<IEnumerable<EType>> typesProvider, Func<EType, DateTime, DateTime?, IEnumerable<DType>> dataProvider, DateTime initialDate, DateTime? finalDate)
+		public Scopes(Func<IEnumerable<IEnumType>> typesProvider, Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider, DateTime initialDate, DateTime? finalDate)
 		{
 			InitialDate = initialDate;
 			FinalDate = finalDate;
@@ -34,19 +32,19 @@ namespace DiagramsModel
 			Initialize(dataProvider);
 		}
 
-		private void Initialize(Func<EType, DateTime, DateTime?, IEnumerable<DType>> dataProvider)
+		private void Initialize(Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider)
 		{
 			foreach (var value in EnumValues)
 			{
 				var result = dataProvider.Invoke(value, InitialDate, FinalDate);
-				Scope<EType, DType> scope;
+				Scope scope;
 				if (FinalDate.HasValue)
 				{
-					scope = new Scope<EType, DType>(result, InitialDate, FinalDate.Value);
+					scope = new Scope(result, InitialDate, FinalDate.Value);
 				}
 				else
 				{
-					scope = new Scope<EType, DType>(result, InitialDate);
+					scope = new Scope(result, InitialDate);
 				}
 
 				scope.EnumMember = value;
@@ -66,14 +64,14 @@ namespace DiagramsModel
 		}
 	}
 
-	public partial class Scopes<EType, DType> : IEnumerable<Scope<EType, DType>>, IEnumerable, IPairOutputStringData
+	public partial class Scopes: IEnumerable<Scope>, IEnumerable, IPairOutputStringData
 	{
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return scopes.GetEnumerator();
 		}
 
-		public Scope<EType, DType> this[int ind]
+		public Scope this[int ind]
 		{
 			get
 			{
@@ -84,7 +82,7 @@ namespace DiagramsModel
 			}
 		}
 
-		public Scope<EType, DType> this[EType typeName]
+		public Scope this[IEnumType typeName]
 		{
 			get
 			{
@@ -92,7 +90,7 @@ namespace DiagramsModel
 			}
 		}
 
-		public IEnumerator<Scope<EType, DType>> GetEnumerator()
+		public IEnumerator<Scope> GetEnumerator()
 		{
 			return scopes.GetEnumerator();
 		}

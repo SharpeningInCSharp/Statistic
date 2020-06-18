@@ -29,10 +29,10 @@ namespace PieDiagramControls
 		private readonly List<PiePiece> piePieces = new List<PiePiece>();
 		private const int FullAngle = 360;
 
-		public Scopes<StatEnumItem, ValueItem> Scopes { get; private set; }
+		public Scopes Scopes { get; private set; }
 		public Brush[] UsersBrushes { get; }
 
-		public PieDiagram(Scopes<StatEnumItem, ValueItem> scopes, Brush[] brushes)
+		public PieDiagram(Scopes scopes, Brush[] brushes)
 		{
 			if (scopes is null)
 				throw new ArgumentNullException($"{nameof(scopes)} was null!");
@@ -52,7 +52,7 @@ namespace PieDiagramControls
 			ShowGeneralInfo();
 		}
 
-		public void LoadNew(Scopes<StatEnumItem, ValueItem> scopes)
+		public void LoadNew(Scopes scopes)
 		{
 			ClearPie();
 

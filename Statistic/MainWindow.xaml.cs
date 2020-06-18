@@ -33,13 +33,13 @@ namespace Statistic
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 		private void Initialize()
 		{
-			var scopes = new Scopes<StatEnumItem, ValueItem>(GetEnums, GetValues, DateTime.Today, null);
+			var scopes = new Scopes(GetEnums, GetValues, DateTime.Today, null);
 			var hdiagram = new HistoDiagram(scopes);
 			var pDiagram = new PieDiagram(scopes,brushes);
 			MainGrid.Children.Add(hdiagram);
 		}
 
-		private IEnumerable<ValueItem> GetValues(StatEnumItem enumItem, DateTime initial, DateTime? final)
+		private IEnumerable<ValueItem> GetValues(IEnumType enumItem, DateTime initial, DateTime? final)
 		{
 			var data = new List<ValueItem>()
 			{

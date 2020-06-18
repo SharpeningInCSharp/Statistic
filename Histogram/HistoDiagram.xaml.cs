@@ -22,14 +22,14 @@ namespace Histogram
 		double YMaxScale => 300;
 		double XMaxScale => 300;
 
-		public HistoDiagram(params Scopes<StatEnumItem, ValueItem>[] scopesCollection)
+		public HistoDiagram(params Scopes[] scopesCollection)
 		{
 			InitializeComponent();
 
 			OnInitialized(scopesCollection);
 		}
 
-		private void OnInitialized(params Scopes<StatEnumItem, ValueItem>[] scopesCollection)
+		private void OnInitialized(params Scopes[] scopesCollection)
 		{
 			InitializeAxies(scopesCollection.Max(s => s.Max(i => i.Max)),
 							scopesCollection.Min(s => s.Min(i => i.Min)));

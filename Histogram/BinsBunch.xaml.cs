@@ -30,7 +30,7 @@ namespace Histogram
 		//TODO: bind to Height
 		List<Bin> Bins = new List<Bin>();
 
-		public BinsBunch(Scopes<StatEnumItem, ValueItem> scopes)
+		public BinsBunch(Scopes scopes)
 		{
 			InitializeComponent();
 
@@ -41,7 +41,7 @@ namespace Histogram
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 
 		
-		private void Initialize(Scopes<StatEnumItem, ValueItem> scopes)
+		private void Initialize(Scopes scopes)
 		{
 			for (int i = 0; i < scopes.Count; i++)
 			{
