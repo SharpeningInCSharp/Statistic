@@ -1,5 +1,4 @@
 ﻿using DiagramsModel;
-using Model;
 using System;
 using System.Linq;
 using System.Windows;
@@ -39,7 +38,6 @@ namespace Histogram
 
 		//SOLVE: add interraction with DiagramDataOutput
 		//SOLVE: add caprion under BinsBunch
-		//SOLVE: draw stuff on axies (scales and arrows)
 		public HistoDiagram(Brush[] brushes, params Scopes[] scopesCollection)
 		{
 			if (scopesCollection is null)
@@ -50,8 +48,8 @@ namespace Histogram
 
 			maxValue = scopesCollection.Max(s => s.Max(i => i.Sum));
 			minValue = scopesCollection.Min(s => s.Min(i => i.Sum));
-			valueAxiesStep = (double)(maxValue - minValue) / GapsAmount;
-			yAxiesStep = YMaxScale / (GapsAmount + 1);
+			valueAxiesStep = (double)(maxValue - minValue) / (GapsAmount - 1);
+			yAxiesStep = YMaxScale / GapsAmount;
 
 			InitializeComponent();
 
@@ -62,11 +60,13 @@ namespace Histogram
 		{
 			InitializeAxies();
 
+			//TODO: set numbers accordig to EnumValues
 			foreach (var scopes in scopesCollection)
 			{
-				var b = new BinsBunch(scopes, Brushes, CalculateItemHeight);
-				b.Shift(BunchesSpace + da, BottomMargin + da);
-				DiagramGrid.Children.Add(b);
+				var binsBunch = new BinsBunch(scopes, Brushes, CalculateItemHeight);
+				binsBunch.Shift(BunchesSpace + da, BottomMargin + da);
+				Grid.SetRow(binsBunch, 1);
+				DiagramGrid.Children.Add(binsBunch);
 			}
 		}
 
@@ -147,11 +147,11 @@ namespace Histogram
 			Geometries.Figures.Add(xAxies);
 		}
 
-		private const int ScaleStrokeLength = 7;
+		private const int ScaleStrokeLength = 8;
 
 		private void InitializeScales()
 		{
-			for (int i = 1; i <= GapsAmount + 1; i++)
+			for (int i = 1; i <= GapsAmount; i++)
 			{
 				var axisScale = new PathFigure()
 				{

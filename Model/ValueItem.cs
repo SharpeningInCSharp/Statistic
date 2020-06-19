@@ -6,6 +6,7 @@ namespace Model
 {
 	public partial class ValueItem
 	{
+		//TODO: need to store date somewhere/ Probably, I should use one mode class as conteiner of curtain type items
 		public ValueItem(decimal value, StatEnumItem statEnum)
 		{
 			if (DataValidation.IsValueValid(value) == false)

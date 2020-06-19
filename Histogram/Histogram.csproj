@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DiagramsDataOutput\DiagramsDataOutput.csproj" />
     <ProjectReference Include="..\DiagramsModel\DiagramsModel.csproj" />
-    <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 
 </Project>
