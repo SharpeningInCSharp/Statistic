@@ -12,6 +12,9 @@ namespace DiagramsDataOutput
 		private int itemsAmount = 0;
 		private const int UnitedColumnFontSize = 22;
 
+		/// <summary>
+		/// Table header
+		/// </summary>
 		public string Header
 		{
 			get => headerTexBlock.Text;
@@ -29,6 +32,10 @@ namespace DiagramsDataOutput
 			MainGrid.RowDefinitions.Add(new RowDefinition());
 		}
 
+		/// <summary>
+		/// Adds new line to table. One value in united columns
+		/// </summary>
+		/// <param name="unitedColumn">Value to be added</param>
 		public void Add(string unitedColumn)
 		{
 			var columnTb = new TextBlock()
@@ -48,6 +55,11 @@ namespace DiagramsDataOutput
 			itemsAmount++;
 		}
 
+		/// <summary>
+		/// Adds new line to table. Each value in each column
+		/// </summary>
+		/// <param name="column1">First column value</param>
+		/// <param name="column2">Second column value</param>
 		public void Add(string column1, string column2)
 		{
 			var column1Tb = new TextBlock()
@@ -80,6 +92,9 @@ namespace DiagramsDataOutput
 			MainGrid.Children.Add(uIElement);
 		}
 
+		/// <summary>
+		/// Clears output info
+		/// </summary>
 		public void Clear()
 		{
 			headerTexBlock.Visibility = Visibility.Collapsed;

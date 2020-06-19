@@ -1,6 +1,8 @@
-﻿namespace DiagramsModel
+﻿using System;
+
+namespace DiagramsModel
 {
-	public interface IEnumType
+	public interface IEnumType : IEquatable<IEnumType>
 	{
 		string Item { get; }
 	}

@@ -1,5 +1,6 @@
 ﻿using DiagramsModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +37,8 @@ namespace Histogram
 
 		public Brush[] Brushes { get; }
 
+		//private readonly Scopes[] scopesCollection;
+		private readonly List<BinsBunch> binsBunches = new List<BinsBunch>();
 		//SOLVE: add interraction with DiagramDataOutput
 		//SOLVE: add caprion under BinsBunch
 		public HistoDiagram(Brush[] brushes, params Scopes[] scopesCollection)
@@ -44,6 +47,8 @@ namespace Histogram
 			{
 				throw new ArgumentNullException(nameof(scopesCollection));
 			}
+			//this.scopesCollection = scopesCollection;
+
 			Brushes = brushes ?? throw new ArgumentNullException(nameof(brushes));
 
 			maxValue = scopesCollection.Max(s => s.Max(i => i.Sum));
@@ -64,9 +69,31 @@ namespace Histogram
 			foreach (var scopes in scopesCollection)
 			{
 				var binsBunch = new BinsBunch(scopes, Brushes, CalculateItemHeight);
+				binsBunch.StatTypeSelected += BinsBunch_StatTypeSelected;
+				binsBunch.StatTypeUnselected += BinsBunch_StatTypeUnselected;
+
 				binsBunch.Shift(BunchesSpace + da, BottomMargin + da);
+				binsBunches.Add(binsBunch);
+
 				Grid.SetRow(binsBunch, 1);
 				DiagramGrid.Children.Add(binsBunch);
+			}
+		}
+
+		private void BinsBunch_StatTypeUnselected()
+		{
+			throw new NotImplementedException();
+		}
+
+		//SOLVE: extract some interfaces and other common stuff
+		private void BinsBunch_StatTypeSelected(IEnumType enumType)
+		{
+			//TODO; add condition, that item's not 0
+			var items = binsBunches.Where(x => x.Scopes.EnumValues.Contains(enumType));		//items with that type
+
+			foreach(var item in items)
+			{
+				item.Select(enumType);
 			}
 		}
 

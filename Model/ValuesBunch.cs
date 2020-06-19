@@ -25,7 +25,7 @@ namespace Model
 		}
 
 	}
-
+	//TODO: should I add one more alternative ctor to Scopes, which takes some interfaced item
 	public partial class ValuesBunch : IEnumerable<ValueItem>
 	{
 		public ValueItem this[int ind]

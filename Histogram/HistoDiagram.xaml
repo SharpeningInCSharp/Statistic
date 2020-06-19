@@ -17,10 +17,10 @@
         </Grid.ColumnDefinitions>
         
         <!--Legend-->
-        <StackPanel Grid.Row="0" Orientation="Vertical">
-            
-        </StackPanel>
-        
+        <StackPanel Grid.Row="0" 
+                    x:Name="LegendItemsStackPanel"
+                    Orientation="Vertical"/>
+
         <!--Diagram-->
         <Path x:Name="AxiesPath"
               Grid.Row="1"

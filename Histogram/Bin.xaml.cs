@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using DiagramsModel;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -47,7 +49,6 @@ namespace Histogram
 			}
 		}
 
-
 		private Brush color;
 		/// <summary>
 		/// Current bin's color
@@ -63,10 +64,14 @@ namespace Histogram
 			}
 		}
 
+		internal Scope Scope { get; }
+
 		public int Ind { get; private set; }
 
-		public Bin(int num, double binHeight)
+		internal Bin(Scope scope, int num, double binHeight)
 		{
+			Scope = scope ?? throw new ArgumentNullException(nameof(scope));
+
 			InitializeComponent();
 
 			MainRect.Height = binHeight;
@@ -82,18 +87,28 @@ namespace Histogram
 			Margin = new Thickness(BinsWidth * (Ind + 1), 0, 0, 0);
 		}
 
-		//TODO: I can Light value either draw dotted line to this value or smth
-		private void MainRect_MouseEnter(object sender, MouseEventArgs e)
+		public void Select()
 		{
 			MainRect.StrokeThickness = activatedRectThickness;
 			MainRect.Fill = SelectionBrush;
+		}
+
+		public void Unselect()
+		{
+			MainRect.StrokeThickness = defaultRectThickness;
+			MainRect.Fill = color;
+		}
+
+		//TODO: I can Light value either draw dotted line to this value or smth
+		private void MainRect_MouseEnter(object sender, MouseEventArgs e)
+		{
+			Select();
 			MouseOn?.Invoke(this);
 		}
 
 		private void MainRect_MouseLeave(object sender, MouseEventArgs e)
 		{
-			MainRect.StrokeThickness = defaultRectThickness;
-			MainRect.Fill = color;
+			Unselect();
 			MouseOut?.Invoke(this);
 		}
 	}

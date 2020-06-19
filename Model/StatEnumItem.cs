@@ -16,7 +16,7 @@ namespace Model
 
 		public override bool Equals(object obj)
 		{
-			if (obj is StatEnumItem statEnumItem)
+			if (obj is IEnumType statEnumItem)
 				return Equals(statEnumItem);
 
 			return false;
@@ -45,6 +45,7 @@ namespace Model
 
 	public partial class StatEnumItem : IEnumType, IEquatable<StatEnumItem>
 	{
+		//TODO: add Equality Comparer with IEnumType or mb string too
 		public string Item { get; }
 
 		public bool Equals([AllowNull] StatEnumItem other)
@@ -54,6 +55,13 @@ namespace Model
 
 			return Item.Equals(other.Item);
 		}
-		
+
+		public bool Equals([AllowNull] IEnumType other)
+		{
+			if (other is null)
+				return false;
+
+			return Item.Equals(other.Item);
+		}
 	}
 }
