@@ -37,7 +37,7 @@ namespace Histogram
 
 		public Brush[] Brushes { get; }
 
-		//private readonly Scopes[] scopesCollection;
+		private readonly Scopes[] scopesCollection;
 		private readonly List<BinsBunch> binsBunches = new List<BinsBunch>();
 		//SOLVE: add interraction with DiagramDataOutput
 		//SOLVE: add caprion under BinsBunch
@@ -47,7 +47,7 @@ namespace Histogram
 			{
 				throw new ArgumentNullException(nameof(scopesCollection));
 			}
-			//this.scopesCollection = scopesCollection;
+			this.scopesCollection = scopesCollection;
 
 			Brushes = brushes ?? throw new ArgumentNullException(nameof(brushes));
 
@@ -58,40 +58,89 @@ namespace Histogram
 
 			InitializeComponent();
 
-			OnInitialized(scopesCollection);
+			OnInitialized();
+
+			OutAllData();
 		}
 
-		private void OnInitialized(params Scopes[] scopesCollection)
+		private void OnInitialized()
 		{
 			InitializeAxies();
 
 			//TODO: set numbers accordig to EnumValues
-			foreach (var scopes in scopesCollection)
+			for (int i = 0; i < scopesCollection.Length; i++)
 			{
-				var binsBunch = new BinsBunch(scopes, Brushes, CalculateItemHeight);
+				var binsBunch = new BinsBunch(scopesCollection[i], Brushes, CalculateItemHeight);
 				binsBunch.StatTypeSelected += BinsBunch_StatTypeSelected;
 				binsBunch.StatTypeUnselected += BinsBunch_StatTypeUnselected;
 
-				binsBunch.Shift(BunchesSpace + da, BottomMargin + da);
+				//SOLVE: error: must be multyply by prevScopesAmount
+				binsBunch.Shift((BunchesSpace + da) * (i + 1), BottomMargin + da);
 				binsBunches.Add(binsBunch);
 
-				Grid.SetRow(binsBunch, 1);
+				Grid.SetColumn(binsBunch, 1);
 				DiagramGrid.Children.Add(binsBunch);
 			}
 		}
 
 		private void BinsBunch_StatTypeUnselected()
 		{
-			throw new NotImplementedException();
+			UnselectAllItems();
+			OutAllData();
+		}
+
+		private void OutAllData()
+		{
+			DiagramStatInfo.Clear();
+
+			DiagramStatInfo.Header = "General info";
+
+			foreach (var scopes in scopesCollection)
+			{
+				DiagramStatInfo.Add(scopes.DatesToString());
+
+				foreach (var type in scopes.EnumValues)
+				{
+					DiagramStatInfo.Add(scopes[type].Sum.ToString("C2"), scopes[type].Ratio.ToString("P2"));
+				}
+			}
+		}
+
+		private void UnselectAllItems()
+		{
+			foreach (var item in binsBunches)
+			{
+				item.Unselect();
+			}
 		}
 
 		//SOLVE: extract some interfaces and other common stuff
+		//SOLVE: remake a bit: probably I shouldn't use Model parts at Controls as much
 		private void BinsBunch_StatTypeSelected(IEnumType enumType)
 		{
-			//TODO; add condition, that item's not 0
-			var items = binsBunches.Where(x => x.Scopes.EnumValues.Contains(enumType));		//items with that type
+			SelectAllItems(enumType);
+			OutAllData(enumType);
+		}
 
-			foreach(var item in items)
+		private void OutAllData(IEnumType enumType)
+		{
+			DiagramStatInfo.Clear();
+			DiagramStatInfo.Header = enumType.Item;
+
+			var items = binsBunches.Select(x => x.Scopes[enumType]);
+
+			//SOLVE: find problem with scopes generation
+			foreach (var item in items)
+			{
+				DiagramStatInfo.Add(item.Sum.ToString("C2"), item.Ratio.ToString("P2"));
+			}
+		}
+
+		private void SelectAllItems(IEnumType enumType)
+		{
+			var items = binsBunches.Where(x => x.Scopes.EnumValues.Contains(enumType));     //items with that type
+
+			foreach (var item in items)
 			{
 				item.Select(enumType);
 			}

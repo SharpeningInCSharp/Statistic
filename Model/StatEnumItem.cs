@@ -45,7 +45,6 @@ namespace Model
 
 	public partial class StatEnumItem : IEnumType, IEquatable<StatEnumItem>
 	{
-		//TODO: add Equality Comparer with IEnumType or mb string too
 		public string Item { get; }
 
 		public bool Equals([AllowNull] StatEnumItem other)

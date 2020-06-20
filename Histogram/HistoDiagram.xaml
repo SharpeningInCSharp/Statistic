@@ -11,19 +11,19 @@
     <Grid Background="White"
           x:Name="DiagramGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         
         <!--Legend-->
-        <StackPanel Grid.Row="0" 
+        <StackPanel Grid.Column="0" 
                     x:Name="LegendItemsStackPanel"
                     Orientation="Vertical"/>
 
         <!--Diagram-->
         <Path x:Name="AxiesPath"
-              Grid.Row="1"
+              Grid.Column="1"
               Margin="{Binding DiagramMargin}"
               Stroke="Black"
               StrokeThickness="1"
@@ -36,8 +36,9 @@
         </Path>
         
         <!--DataOutput-->
-        <out:DiagramStatInfo 
-            Grid.Row="2"
+        <out:DiagramStatInfo
+            Margin="2,4,10,4"
+            Grid.Column="2"
             x:Name="DiagramStatInfo"/>
     </Grid>
 </UserControl>

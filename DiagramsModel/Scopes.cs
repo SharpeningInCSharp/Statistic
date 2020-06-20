@@ -62,6 +62,18 @@ namespace DiagramsModel
 				item.Ratio = (double)(item.Sum / TotalSum);
 			}
 		}
+
+		public string DatesToString()
+		{
+			if (FinalDate.HasValue)
+			{
+				return $"{InitialDate.ToShortDateString()}-{FinalDate.Value.ToShortDateString()}";
+			}
+			else
+			{
+				return InitialDate.ToShortDateString();
+			}
+		}
 	}
 
 	public partial class Scopes: IEnumerable<Scope>, IEnumerable, IPairOutputStringData

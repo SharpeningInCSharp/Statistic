@@ -15,6 +15,10 @@ namespace Histogram
 	public partial class BinsBunch : UserControl
 	{
 		List<Bin> Bins = new List<Bin>();
+		private Bin itemToBeSelected;
+
+		public DateTime InitialDate { get; }
+		public DateTime? FinalDate { get; }
 
 		public event StatTypeSelectionHandler StatTypeSelected;
 		public delegate void StatTypeSelectionHandler(IEnumType enumType);
@@ -29,6 +33,9 @@ namespace Histogram
 				throw new ArgumentNullException(nameof(scopes));
 			}
 			Scopes = scopes;
+
+			InitialDate = scopes.InitialDate;
+			FinalDate = scopes.FinalDate;
 
 			if (calcultateHeightHandler is null)
 			{
@@ -64,14 +71,18 @@ namespace Histogram
 
 		public void Select(IEnumType enumType)
 		{
-			var itemToBeSelected = Bins.FirstOrDefault(x => x.Scope.EnumMember.Equals(enumType) && x.Scope.Sum != 0);
+			itemToBeSelected = Bins.FirstOrDefault(x => x.Scope.EnumMember.Equals(enumType) && x.Scope.Sum != 0);
 
 			itemToBeSelected?.Select();
 		}
 
 		public void Unselect()
 		{
-
+			//foreach(var bin in Bins)
+			//{
+			//bin.Unselect();
+			itemToBeSelected?.Unselect();
+			//}
 		}
 
 		public void Shift(double left, double bottom)
