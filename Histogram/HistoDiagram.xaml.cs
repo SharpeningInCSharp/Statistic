@@ -1,4 +1,5 @@
-﻿using DiagramsModel;
+﻿using DiagramsDataOutput;
+using DiagramsModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,8 @@ namespace Histogram
 
 		private readonly Scopes[] scopesCollection;
 		private readonly List<BinsBunch> binsBunches = new List<BinsBunch>();
+		private readonly List<PieLegendItem> enumTypes = new List<PieLegendItem>();
+
 		//SOLVE: add interraction with DiagramDataOutput
 		//SOLVE: add caprion under BinsBunch
 		public HistoDiagram(Brush[] brushes, params Scopes[] scopesCollection)
@@ -68,18 +71,30 @@ namespace Histogram
 			InitializeAxies();
 
 			//TODO: set numbers accordig to EnumValues
+			int genAmount = 0;
 			for (int i = 0; i < scopesCollection.Length; i++)
 			{
-				var binsBunch = new BinsBunch(scopesCollection[i], Brushes, CalculateItemHeight);
+				var binsBunch = new BinsBunch(scopesCollection[i], Brushes, CalculateItemHeight, AddNewLegendItem);
 				binsBunch.StatTypeSelected += BinsBunch_StatTypeSelected;
 				binsBunch.StatTypeUnselected += BinsBunch_StatTypeUnselected;
 
-				//SOLVE: error: must be multyply by prevScopesAmount
-				binsBunch.Shift((BunchesSpace + da) * (i + 1), BottomMargin + da);
+				binsBunch.Shift((BunchesSpace + da) * (genAmount + 1), BottomMargin + da);
+				genAmount += binsBunch.Count;
+
 				binsBunches.Add(binsBunch);
 
 				Grid.SetColumn(binsBunch, 1);
 				DiagramGrid.Children.Add(binsBunch);
+			}
+		}
+
+		private void AddNewLegendItem(IEnumType enumType, Brush brush)
+		{
+			if (enumTypes.Count(x => x.EnumType.Equals(enumType)) == 0)
+			{
+				var legendItem = new PieLegendItem(enumType, brush);
+				LegendItemsStackPanel.Children.Add(legendItem);
+				enumTypes.Add(legendItem);
 			}
 		}
 
@@ -89,6 +104,8 @@ namespace Histogram
 			OutAllData();
 		}
 
+		//TODO: out Avg info abount type
+		//TODO: think abount DataOutput - seems to big
 		private void OutAllData()
 		{
 			DiagramStatInfo.Clear();
@@ -101,8 +118,11 @@ namespace Histogram
 
 				foreach (var type in scopes.EnumValues)
 				{
-					DiagramStatInfo.Add(scopes[type].Sum.ToString("C2"), scopes[type].Ratio.ToString("P2"));
+					//DiagramStatInfo.Add(scopes[type].EnumMember.ToString(), DiagramsDataOutput.DiagramStatInfo.ColumnType.Data);
+					DiagramStatInfo.Add($"{scopes[type].EnumMember} - {scopes[type].Sum:C2}", scopes[type].Ratio.ToString("P2"));
 				}
+
+				DiagramStatInfo.Add($"Sum: {scopes.TotalSum:C2}", DiagramStatInfo.ColumnType.Data);
 			}
 		}
 
@@ -114,6 +134,7 @@ namespace Histogram
 			}
 		}
 
+		//TODO: add LoadNew(Scopes) method
 		//SOLVE: extract some interfaces and other common stuff
 		//SOLVE: remake a bit: probably I shouldn't use Model parts at Controls as much
 		private void BinsBunch_StatTypeSelected(IEnumType enumType)
@@ -129,10 +150,10 @@ namespace Histogram
 
 			var items = binsBunches.Select(x => x.Scopes[enumType]);
 
-			//SOLVE: find problem with scopes generation
 			foreach (var item in items)
 			{
-				DiagramStatInfo.Add(item.Sum.ToString("C2"), item.Ratio.ToString("P2"));
+				if (item != null)
+					DiagramStatInfo.Add(item.Sum.ToString("C2"), item.Ratio.ToString("P2"));
 			}
 		}
 
@@ -242,7 +263,5 @@ namespace Histogram
 				Geometries.Figures.Add(axisScale);
 			}
 		}
-
-		///Find Max value, and max Y-value will be a bit bigger
 	}
 }

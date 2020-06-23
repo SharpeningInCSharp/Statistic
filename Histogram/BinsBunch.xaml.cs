@@ -17,16 +17,21 @@ namespace Histogram
 		List<Bin> Bins = new List<Bin>();
 		private Bin itemToBeSelected;
 
+		public int Count => Bins.Count;
 		public DateTime InitialDate { get; }
 		public DateTime? FinalDate { get; }
 
-		public event StatTypeSelectionHandler StatTypeSelected;
 		public delegate void StatTypeSelectionHandler(IEnumType enumType);
+		public event StatTypeSelectionHandler StatTypeSelected;
+
+		public delegate void AddItemToLegendHandler(IEnumType enumType, Brush brush);
+		private readonly AddItemToLegendHandler addItemToLegendHandler;
+
 		public event Action StatTypeUnselected;
 
 		public delegate double CalcultateHeightHandler(decimal currentValue);
 
-		public BinsBunch(Scopes scopes, Brush[] brushes, CalcultateHeightHandler calcultateHeightHandler)
+		public BinsBunch(Scopes scopes, Brush[] brushes, CalcultateHeightHandler calcultateHeightHandler, AddItemToLegendHandler addItemToLegendHandler)
 		{
 			if (scopes is null)
 			{
@@ -36,6 +41,8 @@ namespace Histogram
 
 			InitialDate = scopes.InitialDate;
 			FinalDate = scopes.FinalDate;
+
+			this.addItemToLegendHandler = addItemToLegendHandler ?? throw new ArgumentNullException(nameof(addItemToLegendHandler));
 
 			if (calcultateHeightHandler is null)
 			{
@@ -65,6 +72,8 @@ namespace Histogram
 
 				bin.Shift();
 				Bins.Add(bin);
+
+				addItemToLegendHandler?.Invoke(Scopes[i].EnumMember, brushes[i]);
 				MainGrid.Children.Add(bin);
 			}
 		}

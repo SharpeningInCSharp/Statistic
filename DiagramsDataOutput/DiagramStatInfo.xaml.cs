@@ -8,9 +8,26 @@ namespace DiagramsDataOutput
 	/// </summary>
 	public partial class DiagramStatInfo : UserControl
 	{
+		/// <summary>
+		/// Manage single column output
+		/// </summary>
+		public enum ColumnType
+		{
+			/// <summary>
+			/// Bold FontWeight
+			/// </summary>
+			Header,
+
+			/// <summary>
+			/// Normal FontWeight
+			/// </summary>
+			Data,
+		}
+
 		private Style TbStyle { get; }
 		private int itemsAmount = 0;
-		private const int UnitedColumnFontSize = 22;
+		private const int UnitedColumnHeaderFontSize = 22;
+		private readonly int UnitedColumnDataFontSize = 18;
 
 		/// <summary>
 		/// Table header
@@ -25,10 +42,12 @@ namespace DiagramsDataOutput
 			}
 		}
 
+		//TODO:
 		public DiagramStatInfo()
 		{
 			InitializeComponent();
 			TbStyle = FindResource("TextBlockStyle") as Style;
+			//TbStyle.Setters.
 			MainGrid.RowDefinitions.Add(new RowDefinition());
 		}
 
@@ -36,14 +55,17 @@ namespace DiagramsDataOutput
 		/// Adds new line to table. One value in united columns
 		/// </summary>
 		/// <param name="unitedColumn">Value to be added</param>
-		public void Add(string unitedColumn)
+		public void Add(string unitedColumn, ColumnType columnType = ColumnType.Header)
 		{
+			InitParams(columnType, out var fontWeight, out var fontSize);
+
+			//TODO: add underline in case of Data
 			var columnTb = new TextBlock()
 			{
 				Text = unitedColumn,
 				Style = TbStyle,
-				FontWeight = FontWeights.Bold,
-				FontSize = UnitedColumnFontSize,
+				FontWeight = fontWeight,
+				FontSize = fontSize,
 				TextAlignment = TextAlignment.Left,
 			};
 
@@ -53,6 +75,20 @@ namespace DiagramsDataOutput
 			Grid.SetColumnSpan(columnTb, 2);
 
 			itemsAmount++;
+		}
+
+		private void InitParams(ColumnType columnType, out FontWeight fontWeight, out int fontSize)
+		{
+			if (columnType == ColumnType.Header)
+			{
+				fontWeight = FontWeights.Bold;
+				fontSize = UnitedColumnHeaderFontSize;
+			}
+			else
+			{
+				fontWeight = FontWeights.Normal;
+				fontSize = UnitedColumnDataFontSize;
+			}
 		}
 
 		/// <summary>

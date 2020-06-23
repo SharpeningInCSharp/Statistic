@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using DiagramsModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -24,6 +25,7 @@ namespace DiagramsDataOutput
 		public event LegendHandler MouseOut;
 
 		public int Ind { get; }
+		public IEnumType EnumType { get; }
 
 		public PieLegendItem(int i, Brush color, string title)
 		{
@@ -35,7 +37,22 @@ namespace DiagramsDataOutput
 
 			ItemColor.Background = InitialBrush = color;
 			ItemName.Text = title;
+
 			Ind = i;
+		}
+
+		public PieLegendItem(IEnumType enumType, Brush color)
+		{
+			InitializeComponent();
+
+			InitialFontSize = ItemName.FontSize;
+			InitialBorderThickness = ItemColor.BorderThickness.Left;
+			InitialSideSize = ItemColor.Height;
+
+			ItemColor.Background = InitialBrush = color;
+			ItemName.Text = enumType.ToString();
+
+			EnumType = enumType;
 		}
 
 		private void Item_MouseEnter(object sender, MouseEventArgs e)
