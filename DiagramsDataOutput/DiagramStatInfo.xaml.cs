@@ -57,7 +57,6 @@ namespace DiagramsDataOutput
 		{
 			InitParams(columnType, out var fontWeight, out var fontSize, out var underline);
 
-			//TODO: add margin anyway
 			var columnTb = new TextBlock()
 			{
 				Text = unitedColumn,
@@ -66,6 +65,7 @@ namespace DiagramsDataOutput
 				FontSize = fontSize,
 				TextAlignment = TextAlignment.Left,
 				TextDecorations = underline,
+				Margin = new Thickness(0, 4, 0, 0),
 			};
 
 			MainGrid.RowDefinitions.Add(new RowDefinition());
