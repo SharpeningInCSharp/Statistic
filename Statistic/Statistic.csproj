@@ -13,4 +13,8 @@
     <ProjectReference Include="..\PieDiagramControls\PieDiagramControls.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>

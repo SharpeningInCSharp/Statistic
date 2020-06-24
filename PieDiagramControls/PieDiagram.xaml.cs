@@ -75,14 +75,13 @@ namespace PieDiagramControls
 		{
 			var generalVol = Scopes.TotalSum;
 			var genAngle = 0.0;
-			int amount = 0;
+
 			for (int i = 0; i < Scopes.Count(); i++)
 			{
 				if (Scopes[i].Sum != 0)
 				{
 					var angle = Convert.ToDouble((Scopes[i].Sum * FullAngle) / generalVol);
-					var piePiece = new PiePiece(amount, i, angle, UsersBrushes[amount]);
-					amount++;
+					var piePiece = new PiePiece(Scopes[i].EnumMember, angle, UsersBrushes[i]);
 					piePiece.MouseIn += PiePiece_MouseIn;
 					piePiece.MouseOut += PiePiece_MouseOut;
 					piePiece.Rotate(genAngle);
@@ -106,7 +105,7 @@ namespace PieDiagramControls
 		{
 			piePieceHeaderTextBlock.Text = "General info";
 
-			//TODO: edit DiagramInfo interraction - set new Header FontSize and remove piePieceHeaderTextBlock
+			//TODO: edit DiagramInfo interraction - set new Header FontSize and remove piePieceHeaderTextBlock also udopt to new output view (like as HistoDiagram)
 			DiagramInfo.Clear();
 			DiagramInfo.Header = Scopes.TotalSum.ToString("C2");
 			Scopes.OutputData((col1, col2) => DiagramInfo.Add(col1, col2));
@@ -115,8 +114,7 @@ namespace PieDiagramControls
 		private void PiePiece_MouseIn(PiePiece sender)
 		{
 			Panel.SetZIndex(sender, ElementToForegroundIndex);
-			int ind = sender.Ind;
-			var curScope = Scopes[ind];
+			var curScope = Scopes[sender.EnumType];
 			piePieceHeaderTextBlock.Text = $"{curScope.EnumMember}";
 
 			DiagramInfo.Clear();
@@ -124,6 +122,7 @@ namespace PieDiagramControls
 			curScope.OutputData((col1, col2) => DiagramInfo.Add(col1, col2));
 		}
 
+		//TODO: mb solve bug with 100% piePiece initialization
 		private void InitializeLegend()
 		{
 			legend.Children.Clear();
@@ -133,7 +132,7 @@ namespace PieDiagramControls
 			{
 				if (Scopes[i].Sum != 0)                      //Initialize LegendItems only for not empty Pies
 				{
-					var legendItem = new PieLegendItem(amount, UsersBrushes[amount], Scopes[i].EnumMember.Item);
+					var legendItem = new PieLegendItem(Scopes[i].EnumMember, UsersBrushes[amount]);
 					amount++;
 					legendItem.MouseOn += LegendItem_MouseOn;
 					legendItem.MouseOut += LegendItem_MouseOut;
@@ -142,16 +141,16 @@ namespace PieDiagramControls
 			}
 		}
 
-		private void LegendItem_MouseOut(int ind)
+		private void LegendItem_MouseOut(IEnumType enumType)
 		{
-			if (ind >= 0 && ind < piePieces.Count())
-				piePieces[ind].Unselect();
+			piePieces.FirstOrDefault(x => x.EnumType.Equals(enumType))
+					?.Unselect();
 		}
 
-		private void LegendItem_MouseOn(int ind)
+		private void LegendItem_MouseOn(IEnumType enumType)
 		{
-			if (ind >= 0 && ind < piePieces.Count())
-				piePieces[ind].Select();
+			piePieces.FirstOrDefault(x => x.EnumType.Equals(enumType))
+					?.Select();
 		}
 	}
 }

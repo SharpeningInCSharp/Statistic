@@ -57,6 +57,7 @@ namespace DiagramsDataOutput
 		{
 			InitParams(columnType, out var fontWeight, out var fontSize, out var underline);
 
+			//TODO: add margin anyway
 			var columnTb = new TextBlock()
 			{
 				Text = unitedColumn,

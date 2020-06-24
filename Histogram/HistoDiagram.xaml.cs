@@ -70,7 +70,6 @@ namespace Histogram
 		{
 			InitializeAxies();
 
-			//TODO: set numbers accordig to EnumValues
 			int genAmount = 0;
 			for (int i = 0; i < scopesCollection.Length; i++)
 			{
@@ -100,14 +99,14 @@ namespace Histogram
 			}
 		}
 
-		private void LegendItem_MouseOut(int num)
+		private void LegendItem_MouseOut(IEnumType enumType)
 		{
-			throw new NotImplementedException();
+			BinsBunch_StatTypeUnselected();
 		}
 
-		private void LegendItem_MouseOn(int num)
+		private void LegendItem_MouseOn(IEnumType enumType)
 		{
-			throw new NotImplementedException();
+			BinsBunch_StatTypeSelected(enumType);
 		}
 
 		private void BinsBunch_StatTypeUnselected()
@@ -116,8 +115,6 @@ namespace Histogram
 			OutAllData();
 		}
 
-		//TODO: out Avg info abount type
-		//TODO: think abount DataOutput - seems to big
 		private void OutAllData()
 		{
 			DiagramStatInfo.Clear();
@@ -131,10 +128,13 @@ namespace Histogram
 				foreach (var type in scopes.EnumValues)
 				{
 					//DiagramStatInfo.Add(scopes[type].EnumMember.ToString(), DiagramsDataOutput.DiagramStatInfo.ColumnType.Data);
-					DiagramStatInfo.Add($"{scopes[type].EnumMember} - {scopes[type].Sum:C2}", scopes[type].Ratio.ToString("P2"));
+					DiagramStatInfo.Add($"{scopes[type].EnumMember} - {scopes[type].Sum:f2}", scopes[type].Ratio.ToString("P2"));
 				}
 
-				DiagramStatInfo.Add($"Sum: {scopes.TotalSum:C2}", DiagramStatInfo.ColumnType.Data);
+				DiagramStatInfo.Add($"Sum: {scopes.TotalSum:f2}", DiagramStatInfo.ColumnType.Data);
+
+				var avgPercent = scopes.TotalSum / scopesCollection.Sum(x => x.TotalSum);
+				DiagramStatInfo.Add($"Average: {scopes.Average(x => x.Sum):f2}", $"{avgPercent:P2}");
 			}
 		}
 
@@ -160,13 +160,17 @@ namespace Histogram
 			DiagramStatInfo.Clear();
 			DiagramStatInfo.Header = enumType.Item;
 
-			var items = binsBunches.Select(x => x.Scopes[enumType]);
+			var items = binsBunches.Select(x => x.Scopes[enumType]).Where(x => x != null);
 
 			foreach (var item in items)
 			{
-				if (item != null)
-					DiagramStatInfo.Add(item.Sum.ToString("C2"), item.Ratio.ToString("P2"));
+				DiagramStatInfo.Add(item.Sum.ToString("f2"), item.Ratio.ToString("P2"));
 			}
+			var sum = items.Sum(x => x.Sum);
+			DiagramStatInfo.Add($"Total: {sum:f2}", DiagramStatInfo.ColumnType.Data);
+
+			var avgPercent = sum / binsBunches.Sum(x => x.Scopes.TotalSum);
+			DiagramStatInfo.Add($"Average: {items.Average(x => x.Sum):f2}", $"{avgPercent:P2}");
 		}
 
 		private void SelectAllItems(IEnumType enumType)

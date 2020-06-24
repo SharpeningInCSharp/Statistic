@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiagramsModel;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +13,9 @@ namespace PieDiagramControls
 	public partial class PiePiece : UserControl
 	{
 		private double angle;
+
+		public IEnumType EnumType { get; }
+
 		public double Angle
 		{
 			get => angle;
@@ -37,25 +41,22 @@ namespace PieDiagramControls
 		public event PiePieceHandler MouseIn;
 		public event PiePieceHandler MouseOut;
 
-		public int Num { get; }
-		public int Ind { get; }
 		public Point Center { get; private set; } = new Point(0, 0);
 
 		private const double factor = Math.PI / 180;
 
 		private const double R = 200;
 
-		public PiePiece()
-		{
-			InitializeComponent();
-		}
+		//public PiePiece()
+		//{
+		//	InitializeComponent();
+		//}
 
-		public PiePiece(int num, int ind, double angle, Brush brush)
+		public PiePiece(IEnumType enumType, double angle, Brush brush)
 		{
 			InitializeComponent();
-			Num = num;
-			Ind = ind;
 			DefaultBrush = brush;
+			EnumType = enumType;
 			Angle = angle;
 		}
 
