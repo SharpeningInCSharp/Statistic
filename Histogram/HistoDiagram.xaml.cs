@@ -93,9 +93,21 @@ namespace Histogram
 			if (enumTypes.Count(x => x.EnumType.Equals(enumType)) == 0)
 			{
 				var legendItem = new PieLegendItem(enumType, brush);
+				legendItem.MouseOn += LegendItem_MouseOn;
+				legendItem.MouseOut += LegendItem_MouseOut;
 				LegendItemsStackPanel.Children.Add(legendItem);
 				enumTypes.Add(legendItem);
 			}
+		}
+
+		private void LegendItem_MouseOut(int num)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void LegendItem_MouseOn(int num)
+		{
+			throw new NotImplementedException();
 		}
 
 		private void BinsBunch_StatTypeUnselected()

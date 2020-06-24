@@ -27,7 +27,7 @@ namespace DiagramsDataOutput
 		private Style TbStyle { get; }
 		private int itemsAmount = 0;
 		private const int UnitedColumnHeaderFontSize = 22;
-		private readonly int UnitedColumnDataFontSize = 18;
+		private const int UnitedColumnDataFontSize = 18;
 
 		/// <summary>
 		/// Table header
@@ -42,12 +42,10 @@ namespace DiagramsDataOutput
 			}
 		}
 
-		//TODO:
 		public DiagramStatInfo()
 		{
 			InitializeComponent();
 			TbStyle = FindResource("TextBlockStyle") as Style;
-			//TbStyle.Setters.
 			MainGrid.RowDefinitions.Add(new RowDefinition());
 		}
 
@@ -57,9 +55,8 @@ namespace DiagramsDataOutput
 		/// <param name="unitedColumn">Value to be added</param>
 		public void Add(string unitedColumn, ColumnType columnType = ColumnType.Header)
 		{
-			InitParams(columnType, out var fontWeight, out var fontSize);
+			InitParams(columnType, out var fontWeight, out var fontSize, out var underline);
 
-			//TODO: add underline in case of Data
 			var columnTb = new TextBlock()
 			{
 				Text = unitedColumn,
@@ -67,6 +64,7 @@ namespace DiagramsDataOutput
 				FontWeight = fontWeight,
 				FontSize = fontSize,
 				TextAlignment = TextAlignment.Left,
+				TextDecorations = underline,
 			};
 
 			MainGrid.RowDefinitions.Add(new RowDefinition());
@@ -77,17 +75,19 @@ namespace DiagramsDataOutput
 			itemsAmount++;
 		}
 
-		private void InitParams(ColumnType columnType, out FontWeight fontWeight, out int fontSize)
+		private void InitParams(ColumnType columnType, out FontWeight fontWeight, out int fontSize, out TextDecorationCollection underline)
 		{
 			if (columnType == ColumnType.Header)
 			{
 				fontWeight = FontWeights.Bold;
 				fontSize = UnitedColumnHeaderFontSize;
+				underline = null;
 			}
 			else
 			{
 				fontWeight = FontWeights.Normal;
 				fontSize = UnitedColumnDataFontSize;
+				underline = TextDecorations.Underline;
 			}
 		}
 
