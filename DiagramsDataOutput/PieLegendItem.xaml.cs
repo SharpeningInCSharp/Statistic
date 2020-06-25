@@ -20,26 +20,11 @@ namespace DiagramsDataOutput
 		private const double SelectedFontSize = 20;
 		private const int SelectedBorderThickness = 1;
 
-		public delegate void LegendHandler(int num);
+		public delegate void LegendHandler(IEnumType type);
 		public event LegendHandler MouseOn;
 		public event LegendHandler MouseOut;
 
-		public int Ind { get; }
 		public IEnumType EnumType { get; }
-
-		public PieLegendItem(int i, Brush color, string title)
-		{
-			InitializeComponent();
-
-			InitialFontSize = ItemName.FontSize;
-			InitialBorderThickness = ItemColor.BorderThickness.Left;
-			InitialSideSize = ItemColor.Height;
-
-			ItemColor.Background = InitialBrush = color;
-			ItemName.Text = title;
-
-			Ind = i;
-		}
 
 		public PieLegendItem(IEnumType enumType, Brush color)
 		{
@@ -58,7 +43,7 @@ namespace DiagramsDataOutput
 		private void Item_MouseEnter(object sender, MouseEventArgs e)
 		{
 			ToSelectedView();
-			MouseOn?.Invoke(Ind);
+			MouseOn?.Invoke(EnumType);
 		}
 
 		private void ToSelectedView()
@@ -72,7 +57,7 @@ namespace DiagramsDataOutput
 		private void Item_MouseLeave(object sender, MouseEventArgs e)
 		{
 			ToUnselectedView();
-			MouseOut?.Invoke(Ind);
+			MouseOut?.Invoke(EnumType);
 		}
 
 		private void ToUnselectedView()

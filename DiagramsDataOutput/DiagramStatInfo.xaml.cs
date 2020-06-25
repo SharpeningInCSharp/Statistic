@@ -65,6 +65,7 @@ namespace DiagramsDataOutput
 				FontSize = fontSize,
 				TextAlignment = TextAlignment.Left,
 				TextDecorations = underline,
+				Margin = new Thickness(0, 4, 0, 0),
 			};
 
 			MainGrid.RowDefinitions.Add(new RowDefinition());
