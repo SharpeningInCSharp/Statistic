@@ -56,42 +56,8 @@ namespace Utils
 				}
 				else if (valueItems != null && currentRow != null && currentRow.CellsUsed().Count() > 0)
 				{
-					//here must be new method
 					var currentTypeCell = currentRow.FirstCellUsed();
-
-					int lastRowNum = currentTypeCell.Address.RowNumber;
-					while (currentTypeCell.IsEmpty() == false)
-					{
-						//or here
-						var type = currentTypeCell.Value.ToString();
-						if (DataValidation.IsNameValid(type))
-						{
-							var currentValueCell = currentTypeCell.CellBelow();
-							while (currentValueCell.IsEmpty() == false)
-							{
-								if (currentValueCell.Value is DateTime)
-									break;
-
-								if (decimal.TryParse(currentValueCell.Value?.ToString(), out var num))
-								{
-									try
-									{
-										var value = new ValueItem(num, new StatEnumItem(type));
-										valueItems.Add(value);
-									}
-									catch
-									{
-										continue;
-									}
-								}
-
-								lastRowNum = Math.Max(lastRowNum, currentValueCell.Address.RowNumber);
-								currentValueCell = currentValueCell.CellBelow();
-							}
-						}
-
-						currentTypeCell = currentTypeCell.CellRight();
-					}
+					var dRow = ParseValueItems(valueItems, currentTypeCell);		//TODO: use that
 				}
 
 				currentRow = currentRow.RowBelow();
@@ -110,8 +76,50 @@ namespace Utils
 			{
 				if (lastCell.Value is DateTime date && date > initialDate)
 					finalDate = date;
+				else
+					finalDate = null;
+			}
+		}
 
-				finalDate = null;
+		private static int ParseValueItems(ValuesBunch valueItems, IXLCell currentTypeCell)
+		{
+			int lastRowNum = currentTypeCell.Address.RowNumber;
+			while (currentTypeCell.IsEmpty() == false)
+			{
+				var type = currentTypeCell.Value.ToString();
+				if (DataValidation.IsNameValid(type))
+				{
+					ParseValueItem(valueItems, type, currentTypeCell.CellBelow(), ref lastRowNum);
+				}
+
+				currentTypeCell = currentTypeCell.CellRight();
+			}
+
+			return lastRowNum;
+		}
+
+		private static void ParseValueItem(ValuesBunch valueItems, string type, IXLCell currentValueCell, ref int lastRowNum)
+		{
+			while (currentValueCell.IsEmpty() == false)
+			{
+				if (currentValueCell.Value is DateTime)
+					return;
+
+				if (decimal.TryParse(currentValueCell.Value?.ToString(), out var num))
+				{
+					try
+					{
+						var value = new ValueItem(num, new StatEnumItem(type));
+						valueItems.Add(value);
+					}
+					catch
+					{
+						continue;
+					}
+				}
+
+				lastRowNum = Math.Max(lastRowNum, currentValueCell.Address.RowNumber);
+				currentValueCell = currentValueCell.CellBelow();
 			}
 		}
 	}
