@@ -19,6 +19,7 @@ using PieDiagramControls;
 using Statistic.AdditionalWindows;
 using Microsoft.Win32;
 using Utils;
+using System.IO;
 
 namespace Statistic
 {
@@ -101,17 +102,31 @@ namespace Statistic
 
 		private void DiagramSwitchButton_Click(object sender, Resources.Templates.SwitchButton.OnOffButtonClickHandlerEventArgs eventArgs)
 		{
+
 		}
 
 		private void UploadFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			var fileDialog = new OpenFileDialog();
+			var fileDialog = new OpenFileDialog()
+			{
+				InitialDirectory = System.IO.Path.GetFullPath("ExcelSamples"),
+			};
 			fileDialog.ShowDialog();
 
 			if (fileDialog.FileName.EndsWith(".xlsx"))
 			{
 				var res = ExcelExportManager.ParseFileAsync(fileDialog.FileName);
+
+				Task.Run(() => StartLoadingAnimation(res));
 				//TODO: start animation
+			}
+		}
+
+		private void StartLoadingAnimation(Task<IEnumerable<ValuesBunch>> res)
+		{
+			while (res.Status <= TaskStatus.Running)
+			{
+
 			}
 		}
 

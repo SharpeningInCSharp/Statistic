@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Utils
@@ -41,7 +42,7 @@ namespace Utils
 				var currentRowFirstCell = currentRow.FirstCellUsed();
 				var correntRowLastCell = currentRow.LastCellUsed();
 
-				if (currentRowFirstCell.Value is DateTime initialDate)
+				if (currentRowFirstCell?.Value is DateTime initialDate)
 				{
 					InitializeFinalDate(currentRowFirstCell, correntRowLastCell, initialDate, out var finalDate);
 
@@ -53,7 +54,7 @@ namespace Utils
 					else
 						valueItems = new ValuesBunch(initialDate);
 				}
-				else if (valueItems != null)
+				else if (valueItems != null && currentRow != null && currentRow.CellsUsed().Count() > 0)
 				{
 					//here must be new method
 					var currentTypeCell = currentRow.FirstCellUsed();
@@ -71,7 +72,7 @@ namespace Utils
 								if (currentValueCell.Value is DateTime)
 									break;
 
-								if (currentValueCell.Value is decimal num)
+								if (decimal.TryParse(currentValueCell.Value?.ToString(), out var num))
 								{
 									try
 									{
