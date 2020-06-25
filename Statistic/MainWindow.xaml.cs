@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using Histogram;
 using PieDiagramControls;
 using Statistic.AdditionalWindows;
+using Microsoft.Win32;
+using Utils;
 
 namespace Statistic
 {
@@ -101,20 +103,28 @@ namespace Statistic
 		{
 		}
 
+		private void UploadFileButton_Click(object sender, RoutedEventArgs e)
+		{
+			var fileDialog = new OpenFileDialog();
+			fileDialog.ShowDialog();
+
+			if (fileDialog.FileName.EndsWith(".xlsx"))
+			{
+				var res = ExcelExportManager.ParseFileAsync(fileDialog.FileName);
+				//TODO: start animation
+			}
+		}
+
+		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			var infoWin = new AppInfoWindow();
+			infoWin.ShowDialog();
+		}
+
 		#region WindowManagmentControls
 		private void MainGrid_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			MainGrid.Focus();
-		}
-
-		private void InfoButton_Click(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-		private void UploadFileButton_Click(object sender, RoutedEventArgs e)
-		{
-
 		}
 
 		private void CollapseWindowButton_Click(object sender, RoutedEventArgs e)
@@ -132,16 +142,5 @@ namespace Statistic
 			DragMove();
 		}
 		#endregion
-
-		private void AppInfo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-
-		}
-
-		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			var infoWin = new AppInfoWindow();
-			infoWin.ShowDialog();
-		}
 	}
 }

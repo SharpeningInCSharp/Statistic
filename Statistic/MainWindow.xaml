@@ -82,7 +82,7 @@
                         Margin="10"
                         HorizontalAlignment="Left"
                         Style="{StaticResource InfoButton}"
-                        Click="InfoButton_Click"
+                        Command="cmd:AppCommands.ShowInfo"
                         Content="Info"/>
 
                 <TextBlock Text="Choose file"
@@ -97,14 +97,15 @@
                        Grid.ColumnSpan="2">
                With help of this app you can create diagrams.
                 <LineBreak/>
-                <Hyperlink>More info</Hyperlink>
+                <Hyperlink Command="cmd:AppCommands.ShowInfo">More info</Hyperlink>
                 </TextBlock>
 
                 <Button x:Name="UploadFileButton"
-                    Click="UploadFileButton_Click"
-                    ToolTip="Tap here to open file manager"
-                    Grid.Column="0"
-                    Grid.Row="3">
+                        Click="UploadFileButton_Click"
+                        ToolTip="Tap here to open file manager"
+                        Style="{StaticResource InnerImageButton}"
+                        Grid.Column="0"
+                        Grid.Row="3">
                     <Image Source="pack://application:,,,/Resources/UploadFileIcon.png" SnapsToDevicePixels="True"/>
                 </Button>
 
