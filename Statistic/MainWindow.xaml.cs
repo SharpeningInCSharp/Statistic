@@ -11,6 +11,7 @@ using PieDiagramControls;
 using Statistic.AdditionalWindows;
 using Microsoft.Win32;
 using Utils;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace Statistic
 {
@@ -19,12 +20,13 @@ namespace Statistic
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		Scopes[] scopes = null;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			ExcelExportManager.ParsingComplete += ExcelExportManager_ParsingComplete;
-			//Initialize();
 		}
 
 		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
@@ -41,8 +43,19 @@ namespace Statistic
 					DiagramsSwitchStackPanel.Visibility = items.Count() > 1 ? Visibility.Hidden : Visibility.Visible;
 			}
 			);
+			InitializeScopes(items, itemsAmount);
 
 			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
+		}
+
+		private void InitializeScopes(IEnumerable<ValuesBunch> items, int itemsAmount)
+		{
+			scopes = new Scopes[itemsAmount];
+			for (int i = 0; i < itemsAmount; i++)
+			{
+				//items.ElementAt(i)
+				//scopes[i] = new Scopes();
+			}
 		}
 
 		//TODO: create special util for color generation
