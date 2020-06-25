@@ -17,7 +17,7 @@ namespace Utils
 		{
 			var items = new List<ValuesBunch>();
 
-			var wb = new XLWorkbook(path);
+			using var wb = new XLWorkbook(path);
 			foreach (var sheet in wb.Worksheets)
 			{
 				items.AddRange(ReadWorkSheet(sheet));
