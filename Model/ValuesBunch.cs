@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DiagramsModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Model
 {
@@ -45,6 +47,25 @@ namespace Model
 		{
 			InitialDate = initialDate;
 			FinalDate = finalDate;
+		}
+
+		//TODO: ExtractInterface
+		public IEnumerable<IEnumType> GetTypes()
+		{
+			return values.Select(x => x.EnumType);
+		}
+
+		public IEnumerable<IScopeSelectionItem> GetData(IEnumType enumType, DateTime initialDate, DateTime? finalDate)
+		{
+			//TODO: what about DateTime
+			if(finalDate.HasValue)
+			{
+				return values.Where(x => x.EnumType == enumType);
+			}
+			else
+			{
+				return values.Where(x => x.EnumType == enumType);
+			}
 		}
 
 		public void Add(ValueItem item)
