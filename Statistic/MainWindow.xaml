@@ -46,6 +46,10 @@
                Grid.ColumnSpan="3"
                Stretch="Fill"/>
 
+        <ctrl:LoadingRoundAnimation Panel.ZIndex="100"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+
         <Grid Margin="30,10,10,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*"/>
@@ -61,7 +65,7 @@
               StrokeThickness="2"
               Fill="#AAC7A61E"
               Data="M0,0 h1435 a100,80 0 0 0 90,50 h340 a10,10 0 0 1 10,10 v940 a10,10 0 0 1 -10,10 h-1865 a10,10 0 0 1 -10,-10 v-990 a10,10 0 0 1 10,-10"/>
-            
+
             <!--Control buttons-->
             <Grid Grid.Column="0">
 
@@ -192,5 +196,6 @@
             </Grid>
 
         </Grid>
+        <!--<Ellipse HorizontalAlignment="Left" Height="54" Margin="526,360,0,0" Stroke="Black" VerticalAlignment="Top" Width="54"/>-->
     </Grid>
 </Window>
