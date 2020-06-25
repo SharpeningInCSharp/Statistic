@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Histogram;
 using PieDiagramControls;
+using Statistic.AdditionalWindows;
 
 namespace Statistic
 {
@@ -40,7 +41,7 @@ namespace Statistic
 
 			var hdiagram = new HistoDiagram(brushes, scopes1, scopes2);
 			var pDiagram = new PieDiagram(scopes1, brushes);
-			MainGrid.Children.Add(hdiagram);
+			DiagramGrid.Children.Add(hdiagram);
 		}
 
 		private IEnumerable<ValueItem> GetValues2(IEnumType enumItem, DateTime initial, DateTime? final)
@@ -95,9 +96,15 @@ namespace Statistic
 		}
 
 		//TODO: how to can I do such think that I can drag files into
+
+		private void DiagramSwitchButton_Click(object sender, Resources.Templates.SwitchButton.OnOffButtonClickHandlerEventArgs eventArgs)
+		{
+		}
+
+		#region WindowManagmentControls
 		private void MainGrid_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-
+			MainGrid.Focus();
 		}
 
 		private void InfoButton_Click(object sender, RoutedEventArgs e)
@@ -112,17 +119,29 @@ namespace Statistic
 
 		private void CollapseWindowButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			WindowState = WindowState.Minimized;
 		}
 
 		private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
 		{
+			Close();
+		}
+
+		private void MainGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			DragMove();
+		}
+		#endregion
+
+		private void AppInfo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
 
 		}
 
-		private void DiagramSwitchButton_Click(object sender, RoutedEventArgs e)
+		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			var infoWin = new AppInfoWindow();
+			infoWin.ShowDialog();
 		}
 	}
 }

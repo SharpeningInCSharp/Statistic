@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\GradientBackgroundImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DiagramsModel\DiagramsModel.csproj" />
     <ProjectReference Include="..\Histogram\Histogram.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
@@ -14,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Resource Include="Resources\GradientBackgroundImage.png" />
   </ItemGroup>
 
 </Project>

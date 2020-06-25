@@ -5,13 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <UserControl.Resources>
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
     </UserControl.Resources>
-    <StackPanel>
+    
+    <StackPanel Margin="4,4,10,4">
         <TextBlock Name="headerTexBlock"
                    Visibility="Collapsed"
                    Style="{StaticResource TextBlockStyle}"
