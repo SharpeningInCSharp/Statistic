@@ -47,6 +47,8 @@
                Stretch="Fill"/>
 
         <ctrl:LoadingRoundAnimation Panel.ZIndex="100"
+                                    x:Name="LoadingAnimation"
+                                    Visibility="Hidden"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"/>
 

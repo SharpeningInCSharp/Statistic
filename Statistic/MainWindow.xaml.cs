@@ -32,8 +32,17 @@ namespace Statistic
 		{
 			InitializeComponent();
 
-			Initialize();
+			ExcelExportManager.ParsingComplete += ExcelExportManager_ParsingComplete;
+			//Initialize();
 		}
+
+		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
+		{
+			var readItems = items;
+
+			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
+		}
+
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 		private void Initialize()
 		{
@@ -115,18 +124,8 @@ namespace Statistic
 
 			if (fileDialog.FileName.EndsWith(".xlsx"))
 			{
-				var res = ExcelExportManager.ParseFileAsync(fileDialog.FileName);
-
-				Task.Run(() => StartLoadingAnimation(res));
-				//TODO: start animation
-			}
-		}
-
-		private void StartLoadingAnimation(Task<IEnumerable<ValuesBunch>> res)
-		{
-			while (res.Status <= TaskStatus.Running)
-			{
-
+				LoadingAnimation.Visibility = Visibility.Visible;
+				ExcelExportManager.ParseFileAsync(fileDialog.FileName);
 			}
 		}
 

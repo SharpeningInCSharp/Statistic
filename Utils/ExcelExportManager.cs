@@ -9,12 +9,15 @@ namespace Utils
 {
 	public class ExcelExportManager
 	{
-		public static async Task<IEnumerable<ValuesBunch>> ParseFileAsync(string path)
+		public delegate void ExcelExportDelegateHandler(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items);
+		public static event ExcelExportDelegateHandler ParsingComplete;
+
+		public static async void ParseFileAsync(string path)
 		{
-			return await Task.Run(() => ParseFile(path));
+			await Task.Run(() => ParseFile(path));
 		}
 
-		private static IEnumerable<ValuesBunch> ParseFile(string path)
+		private static void ParseFile(string path)
 		{
 			var items = new List<ValuesBunch>();
 
@@ -24,7 +27,7 @@ namespace Utils
 				items.AddRange(ReadWorkSheet(sheet));
 			}
 
-			return items;
+			ParsingComplete?.Invoke(null, items);
 		}
 
 		private static IEnumerable<ValuesBunch> ReadWorkSheet(IXLWorksheet worksheet)
@@ -57,7 +60,7 @@ namespace Utils
 				else if (valueItems != null && currentRow != null && currentRow.CellsUsed().Count() > 0)
 				{
 					var currentTypeCell = currentRow.FirstCellUsed();
-					var dRow = ParseValueItems(valueItems, currentTypeCell);		//TODO: use that
+					var dRow = ParseValueItems(valueItems, currentTypeCell);        //TODO: use that
 				}
 
 				currentRow = currentRow.RowBelow();
