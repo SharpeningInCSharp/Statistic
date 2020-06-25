@@ -2,7 +2,82 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Statistic.Resources.Templates">
 
-    <ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="InfoButton" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="4"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="MainGrid">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Ellipse Width="35"
+                                 SnapsToDevicePixels="True"
+                                 Height="35"
+                                 StrokeThickness="1"
+                                 Stroke="{TemplateBinding Foreground}"
+                                 Fill="{TemplateBinding Background}"/>
+                        
+                        <Ellipse Width="3"
+                                 SnapsToDevicePixels="True"
+                                 Height="15"
+                                 StrokeThickness="1"
+                                 Stroke="{TemplateBinding Foreground}"
+                                 Fill="{TemplateBinding Foreground}"
+                                 Margin="0,5,0,0"/>
+
+                        <Ellipse Width="4"
+                                 SnapsToDevicePixels="True"
+                                  x:Name="PointEllipse"
+                                 Margin="0,0,0,20"
+                                 Height="4"
+                                 StrokeThickness="1"
+                                 Stroke="{TemplateBinding Foreground}"
+                                 Fill="{TemplateBinding Foreground}"/>
+
+                        <ContentPresenter Grid.Row="1" 
+                                          Margin="2"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
+
+                        <Grid.RenderTransform>
+                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                        </Grid.RenderTransform>
+                        
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter"
+                                      SourceName="MainGrid">
+                            <BeginStoryboard x:Name="ballMovementStoryboard">
+                                <Storyboard Storyboard.TargetName="PointEllipse"
+                                            Storyboard.TargetProperty="Margin"
+                                            RepeatBehavior="Forever"
+                                            AutoReverse="True">
+                                    <ThicknessAnimation To="0,0,0,25" Duration="0:0:0.2"/>
+                                    <ThicknessAnimation To="0,0,0,28" Duration="0:0:0.4"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <EventTrigger RoutedEvent="MouseLeave"
+                                      SourceName="MainGrid">
+                            <StopStoryboard BeginStoryboardName="ballMovementStoryboard"/>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InnerImageButton" TargetType="Button">
+        <!--Just image inside, small square size-->
+    </Style>
     
 </ResourceDictionary>

@@ -80,8 +80,10 @@
 
                 <Button x:Name="InfoButton"
                         Margin="10"
-                    Click="InfoButton_Click"
-                    Content="Info"/>
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource InfoButton}"
+                        Click="InfoButton_Click"
+                        Content="Info"/>
 
                 <TextBlock Text="Choose file"
                        Style="{StaticResource HeaderTextBlock}"
@@ -99,11 +101,12 @@
                 </TextBlock>
 
                 <Button x:Name="UploadFileButton"
-                    Content="Upload"
                     Click="UploadFileButton_Click"
                     ToolTip="Tap here to open file manager"
                     Grid.Column="0"
-                    Grid.Row="3"/>
+                    Grid.Row="3">
+                    <Image Source="pack://application:,,,/Resources/UploadFileIcon.png" SnapsToDevicePixels="True"/>
+                </Button>
 
             </Grid>
 
