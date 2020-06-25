@@ -4,18 +4,47 @@ using System.Collections.Generic;
 
 namespace Model
 {
+	/// <summary>
+	/// Abstraction for items range for curtain period
+	/// </summary>
 	public partial class ValuesBunch
 	{
-		public DateTime Date { get; }
+		/// <summary>
+		/// Initial date of range
+		/// </summary>
+		public DateTime InitialDate { get; }
 
+		/// <summary>
+		/// Final date of range. Is null if range constist from a single date
+		/// </summary>
+		public DateTime? FinalDate { get; }
+
+		/// <summary>
+		/// Amount of statistic items
+		/// </summary>
 		public int Count => values.Count;
 
 		private readonly List<ValueItem> values = new List<ValueItem>();
 
-		public ValuesBunch(DateTime date, List<ValueItem> items)
+		/// <summary>
+		/// Creates <see cref="ValuesBunch"/> object for single <paramref name="date"/>
+		/// </summary>
+		/// <param name="date">Date of statistic selection</param>
+		public ValuesBunch(DateTime date)
 		{
-			Date = date;
-			values = items ?? throw new ArgumentNullException(nameof(items));
+			InitialDate = date;
+			FinalDate = null;
+		}
+
+		/// <summary>
+		/// Creates <see cref="ValuesBunch"/> object for dates range from <paramref name="initialDate"/> to <paramref name="finalDate"/>
+		/// </summary>
+		/// <param name="initialDate">The first date in range</param>
+		/// <param name="finalDate">The last one date in range</param>
+		public ValuesBunch(DateTime initialDate, DateTime finalDate)
+		{
+			InitialDate = initialDate;
+			FinalDate = finalDate;
 		}
 
 		public void Add(ValueItem item)
@@ -25,6 +54,7 @@ namespace Model
 		}
 
 	}
+
 	//TODO: should I add one more alternative ctor to Scopes, which takes some interfaced item
 	public partial class ValuesBunch : IEnumerable<ValueItem>
 	{

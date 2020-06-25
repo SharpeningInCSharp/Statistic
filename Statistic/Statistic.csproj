@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ExcelSamples\**" />
+    <EmbeddedResource Remove="ExcelSamples\**" />
+    <None Remove="ExcelSamples\**" />
+    <Page Remove="ExcelSamples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\GradientBackgroundImage.png" />
     <None Remove="Resources\UploadFileIcon.png" />
   </ItemGroup>

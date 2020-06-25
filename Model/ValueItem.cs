@@ -56,6 +56,9 @@ namespace Model
 
 		public bool Equals([AllowNull] ValueItem other)
 		{
+			if (other is null)
+				return false;
+
 			return GetTotal == other.GetTotal && EnumType.Equals(other.EnumType);
 		}
 	}
