@@ -54,7 +54,7 @@ namespace Utils
 				{
 					InitializeFinalDate(currentRowFirstCell, correntRowLastCell, initialDate, out var finalDate);
 
-					if (valueItems != null)
+					if (valueItems != null && valueItems.Count > 0)
 						items.Add(valueItems);
 
 					if (finalDate.HasValue)
@@ -67,7 +67,7 @@ namespace Utils
 					var currentTypeCell = currentRow.FirstCellUsed();
 					var rowDelta = ParseValueItems(valueItems, currentTypeCell);
 
-					if (valueItems != null)
+					if (valueItems != null && valueItems.Count > 0)
 					{
 						items.Add(valueItems);
 						valueItems = null;
@@ -79,7 +79,7 @@ namespace Utils
 				currentRow = currentRow.RowBelow();
 			}
 
-			if (valueItems != null)
+			if (valueItems != null && valueItems.Count > 0)
 				items.Add(valueItems);
 
 			return items;

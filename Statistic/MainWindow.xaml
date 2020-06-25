@@ -140,11 +140,12 @@
                        VerticalAlignment="Center"/>
 
                 <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center"
-                        Visibility="Visible"
-                        Grid.Row="1"
-                        Grid.Column="0">
+                            x:Name="DiagramsSwitchStackPanel"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center"
+                            Visibility="Hidden"
+                            Grid.Row="1"
+                            Grid.Column="0">
 
                     <TextBlock Text="Histogram"
                            FontWeight="SemiBold"
