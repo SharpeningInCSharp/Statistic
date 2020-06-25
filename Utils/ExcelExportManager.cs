@@ -18,11 +18,16 @@ namespace Utils
 		{
 			var items = new List<ValuesBunch>();
 
-			using var wb = new XLWorkbook(path);
-			foreach (var sheet in wb.Worksheets)
+			try
 			{
-				items.AddRange(ReadWorkSheet(sheet));
+				using var wb = new XLWorkbook(path);
+				foreach (var sheet in wb.Worksheets)
+				{
+					items.AddRange(ReadWorkSheet(sheet));
+				}
 			}
+			catch
+			{ }
 
 			return items;
 		}
@@ -37,12 +42,12 @@ namespace Utils
 			IXLRow currentRow = firstRow;
 			ValuesBunch valueItems = null;
 
-			while (currentRow != lastRow)
+			while (currentRow.RowNumber() <= lastRow.RowNumber())
 			{
 				var currentRowFirstCell = currentRow.FirstCellUsed();
 				var correntRowLastCell = currentRow.LastCellUsed();
 
-				if (currentRowFirstCell?.Value is DateTime initialDate)
+				if (DateTime.TryParse(currentRowFirstCell?.CachedValue.ToString(), out var initialDate) && initialDate < DateTime.Now)
 				{
 					InitializeFinalDate(currentRowFirstCell, correntRowLastCell, initialDate, out var finalDate);
 
@@ -57,24 +62,35 @@ namespace Utils
 				else if (valueItems != null && currentRow != null && currentRow.CellsUsed().Count() > 0)
 				{
 					var currentTypeCell = currentRow.FirstCellUsed();
-					var dRow = ParseValueItems(valueItems, currentTypeCell);		//TODO: use that
+					var rowDelta = ParseValueItems(valueItems, currentTypeCell);
+
+					if (valueItems != null)
+					{
+						items.Add(valueItems);
+						valueItems = null;
+					}
+
+					currentRow = currentRow.RowBelow(rowDelta - currentRow.RowNumber());
 				}
 
 				currentRow = currentRow.RowBelow();
 			}
+
+			if (valueItems != null)
+				items.Add(valueItems);
 
 			return items;
 		}
 
 		private static void InitializeFinalDate(IXLCell firstCell, IXLCell lastCell, DateTime initialDate, out DateTime? finalDate)
 		{
-			if (lastCell.Value.Equals(firstCell.Value))
+			if (lastCell.CachedValue.Equals(firstCell.CachedValue))
 			{
 				finalDate = null;
 			}
 			else
 			{
-				if (lastCell.Value is DateTime date && date > initialDate)
+				if (DateTime.TryParse(lastCell.CachedValue.ToString(), out var date) && date > initialDate)
 					finalDate = date;
 				else
 					finalDate = null;
@@ -86,7 +102,7 @@ namespace Utils
 			int lastRowNum = currentTypeCell.Address.RowNumber;
 			while (currentTypeCell.IsEmpty() == false)
 			{
-				var type = currentTypeCell.Value.ToString();
+				var type = currentTypeCell.CachedValue.ToString();
 				if (DataValidation.IsNameValid(type))
 				{
 					ParseValueItem(valueItems, type, currentTypeCell.CellBelow(), ref lastRowNum);
@@ -102,10 +118,10 @@ namespace Utils
 		{
 			while (currentValueCell.IsEmpty() == false)
 			{
-				if (currentValueCell.Value is DateTime)
+				if (DateTime.TryParse(currentValueCell.CachedValue.ToString(), out var d))
 					return;
 
-				if (decimal.TryParse(currentValueCell.Value?.ToString(), out var num))
+				if (decimal.TryParse(currentValueCell.CachedValue?.ToString(), out var num))
 				{
 					try
 					{
