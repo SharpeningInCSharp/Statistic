@@ -93,5 +93,36 @@ namespace Statistic
 				new StatEnumItem("Lupa"),
 			};
 		}
+
+		//TODO: how to can I do such think that I can drag files into
+		private void MainGrid_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void InfoButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void UploadFileButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void CollapseWindowButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void DiagramSwitchButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

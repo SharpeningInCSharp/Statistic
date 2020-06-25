@@ -5,8 +5,163 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Statistic"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="MainGrid">
+        Title="MainWindow" Height="500" Width="850">
+    <Window.Resources>
+
+        <Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Margin" Value="15,10,15,0"/>
+        </Style>
+
+        <Style x:Key="NoteTextBlock" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid x:Name="MainGrid"
+          Margin="30,10,10,10"
+          Focusable="True"
+          MouseDown="MainGrid_MouseDown">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.52*"/>
+        </Grid.ColumnDefinitions>
+
+        <Path x:Name="PanelPath"
+              Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="3"
+              Stroke="#AAC71914"
+              StrokeThickness="2"
+              Fill="#BBC7A61E"
+              Data="M0,0 h600 a50,50 0 0 0 50,50 h150 a5,5 0 0 1 5,5 v400 a5,5 0 0 1 -5,5 h-800 a5,5 0 0 1 -5,-5 v-450 a5,5 0 0 1 5,-5"/>
+
+        <!--Control buttons-->
+        <Grid Grid.Column="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="InfoButton"
+                    Click="InfoButton_Click"
+                    Content="Info"/>
+
+            <TextBlock Text="Choose file"
+                       Style="{StaticResource HeaderTextBlock}"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"/>
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Style="{StaticResource NoteTextBlock}"
+                       Grid.ColumnSpan="2">
+               With help of this app you can create diagrams.
+                <LineBreak/>
+                <Hyperlink>More info</Hyperlink>
+            </TextBlock>
+
+            <Button x:Name="UploadFileButton"
+                    Content="Upload"
+                    Click="UploadFileButton_Click"
+                    ToolTip="Tap here to open file manager"
+                    Grid.Column="0"
+                    Grid.Row="3"/>
+
+        </Grid>
+
+        <!--Diagram-->
+        <Grid Grid.Column="1"
+              Grid.ColumnSpan="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.9*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Diagram"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       Style="{StaticResource HeaderTextBlock}"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                
+                <TextBlock Text="Histogram"
+                           FontWeight="SemiBold"
+                           Style="{StaticResource NoteTextBlock}"/>
+                
+                <Button x:Name="DiagramSwitchButton"
+                        Click="DiagramSwitchButton_Click"/>
+
+                <TextBlock Text="Pie diagram"
+                           FontWeight="SemiBold"
+                           Style="{StaticResource NoteTextBlock}"/>
+
+            </StackPanel>
+            
+        </Grid>
+
+        <!--Window managment-->
+        <Grid Grid.Column="2"
+              Margin="15"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="CollapseWindowButton"
+                    Grid.Column="0"
+                    Content="Collapse"
+                    ToolTip="Collapse"
+                    Click="CollapseWindowButton_Click"/>
+
+            <Button x:Name="FullScreenWindowButton"
+                    Grid.Column="1"
+                    Content="Full screen"
+                    ToolTip=""/>
+
+            <Button x:Name="CloseWindowButton"
+                    Click="CloseWindowButton_Click"
+                    Grid.Column="2"
+                    Content="Close"
+                    ToolTip="Close"/>
+
+        </Grid>
 
     </Grid>
 </Window>
