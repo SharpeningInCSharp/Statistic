@@ -8,7 +8,7 @@ namespace Model
 	{
 		public StatEnumItem(string value)
 		{
-			if (DataValidation.NameValid(value) == false)
+			if (DataValidation.IsNameValid(value) == false)
 				throw new ArgumentException($"{nameof(value)} is invalid {value}");
 
 			Item = value;

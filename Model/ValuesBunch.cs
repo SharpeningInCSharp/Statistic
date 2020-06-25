@@ -9,37 +9,42 @@ namespace Model
 	/// </summary>
 	public partial class ValuesBunch
 	{
+		/// <summary>
+		/// Initial date of range
+		/// </summary>
 		public DateTime InitialDate { get; }
 
+		/// <summary>
+		/// Final date of range. Is null if range constist from a single date
+		/// </summary>
 		public DateTime? FinalDate { get; }
 
+		/// <summary>
+		/// Amount of statistic items
+		/// </summary>
 		public int Count => values.Count;
 
 		private readonly List<ValueItem> values = new List<ValueItem>();
 
 		/// <summary>
-		/// Creates <see cref="ValuesBunch"/> object from <paramref name="items"/> for single <paramref name="date"/>
+		/// Creates <see cref="ValuesBunch"/> object for single <paramref name="date"/>
 		/// </summary>
-		/// <param name="date"></param>
-		/// <param name="items"></param>
-		public ValuesBunch(DateTime date, List<ValueItem> items)
+		/// <param name="date">Date of statistic selection</param>
+		public ValuesBunch(DateTime date)
 		{
 			InitialDate = date;
 			FinalDate = null;
-			values = items ?? throw new ArgumentNullException(nameof(items));
 		}
 
 		/// <summary>
-		/// 
+		/// Creates <see cref="ValuesBunch"/> object for dates range from <paramref name="initialDate"/> to <paramref name="finalDate"/>
 		/// </summary>
-		/// <param name="initialDate"></param>
-		/// <param name="finalDate"></param>
-		/// <param name="items"></param>
-		public ValuesBunch(DateTime initialDate, DateTime finalDate, List<ValueItem> items)
+		/// <param name="initialDate">The first date in range</param>
+		/// <param name="finalDate">The last one date in range</param>
+		public ValuesBunch(DateTime initialDate, DateTime finalDate)
 		{
 			InitialDate = initialDate;
 			FinalDate = finalDate;
-			values = items ?? throw new ArgumentNullException(nameof(items));
 		}
 
 		public void Add(ValueItem item)
