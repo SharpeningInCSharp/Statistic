@@ -31,16 +31,6 @@ namespace Statistic
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			ExcelExportManager.ParsingComplete += ExcelExportManager_ParsingComplete;
-			//Initialize();
-		}
-
-		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
-		{
-			var readItems = items;
-
-			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
 		}
 
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
@@ -125,8 +115,18 @@ namespace Statistic
 			if (fileDialog.FileName.EndsWith(".xlsx"))
 			{
 				LoadingAnimation.Visibility = Visibility.Visible;
-				ExcelExportManager.ParseFileAsync(fileDialog.FileName);
+
+				var excelParser = new ExcelExportManager(fileDialog.FileName);
+				excelParser.ParsingComplete += ExcelExportManager_ParsingComplete;
+				excelParser.ParseFileAsync();
 			}
+		}
+
+		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
+		{
+			var readItems = items;
+
+			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
 		}
 
 		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)
