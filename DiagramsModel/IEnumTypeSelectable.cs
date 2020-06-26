@@ -7,6 +7,10 @@ namespace DiagramsModel
 	/// </summary>
 	public interface IEnumTypeSelectable
 	{
+		/// <summary>
+		/// Unique sequence of <see cref="IEnumType"/>
+		/// </summary>
+		/// <returns></returns>
 		IEnumerable<IEnumType> GetTypes();
 	}
 }

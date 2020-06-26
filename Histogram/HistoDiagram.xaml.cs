@@ -127,7 +127,6 @@ namespace Histogram
 
 				foreach (var type in scopes.EnumValues)
 				{
-					//DiagramStatInfo.Add(scopes[type].EnumMember.ToString(), DiagramsDataOutput.DiagramStatInfo.ColumnType.Data);
 					DiagramStatInfo.Add($"{scopes[type].EnumMember} - {scopes[type].Sum:f2}", scopes[type].Ratio.ToString("P2"));
 				}
 

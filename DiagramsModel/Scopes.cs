@@ -22,6 +22,17 @@ namespace DiagramsModel
 
 		private readonly List<Scope> scopes = new List<Scope>();
 
+		private Scopes(Func<IEnumerable<IEnumType>> typesProvider, DateTime initialDate, DateTime? finalDate)
+		{
+			if (typesProvider is null)
+				throw new ArgumentNullException(nameof(typesProvider));
+
+			InitialDate = initialDate;
+			FinalDate = finalDate;
+
+			EnumValues = (typesProvider.Invoke() ?? throw new ArgumentNullException($"{nameof(typesProvider)} can't return null.")).Distinct();
+		}
+
 		/// <summary>
 		/// You should use that ctor to get data using date.
 		/// </summary>
@@ -29,18 +40,14 @@ namespace DiagramsModel
 		/// <param name="dataProvider">Provides a way to get data according to curtain <see cref="IEnumType"/> and Dates range</param>
 		/// <param name="initialDate">Start of date range</param>
 		/// <param name="finalDate">End of date range</param>
-		public Scopes(Func<IEnumerable<IEnumType>> typesProvider, Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider, DateTime initialDate, DateTime? finalDate)
+		public Scopes(Func<IEnumerable<IEnumType>> typesProvider,
+						Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider,
+						DateTime initialDate, DateTime? finalDate)
+				: this(typesProvider, initialDate, finalDate)
 		{
-			if (typesProvider is null)
-				throw new ArgumentNullException(nameof(typesProvider));
-
 			if (dataProvider is null)
 				throw new ArgumentNullException(nameof(dataProvider));
 
-			InitialDate = initialDate;
-			FinalDate = finalDate;
-
-			EnumValues = typesProvider.Invoke();
 			Initialize(dataProvider);
 		}
 
@@ -51,18 +58,14 @@ namespace DiagramsModel
 		/// <param name="dataProvider">Provides a way to get data according to curtain <see cref="IEnumType"/> without any dates</param>
 		/// <param name="initialDate">Initial date of the date range</param>
 		/// <param name="finalDate">Final date of the date range (is null if equals <paramref name="initialDate"/>)</param>
-		public Scopes(Func<IEnumerable<IEnumType>> typesProvider, Func<IEnumType, IEnumerable<IScopeSelectionItem>> dataProvider, DateTime initialDate, DateTime? finalDate)
+		public Scopes(Func<IEnumerable<IEnumType>> typesProvider,
+						Func<IEnumType, IEnumerable<IScopeSelectionItem>> dataProvider,
+						DateTime initialDate, DateTime? finalDate)
+				: this(typesProvider, initialDate, finalDate)
 		{
-			if (typesProvider is null)
-				throw new ArgumentNullException(nameof(typesProvider));
-
 			if (dataProvider is null)
 				throw new ArgumentNullException(nameof(dataProvider));
 
-			InitialDate = initialDate;
-			FinalDate = finalDate;
-
-			EnumValues = typesProvider.Invoke() ?? throw new ArgumentNullException($"{nameof(typesProvider)} can't return null.");
 			Initialize(dataProvider);
 		}
 
@@ -70,17 +73,8 @@ namespace DiagramsModel
 		/// Creates object using <paramref name="source"/>
 		/// </summary>
 		/// <param name="source">Object with implemented <see cref="IScopeSource"/></param>
-		public Scopes(IScopeSource source)
-		{
-			if (source is null)
-				throw new ArgumentNullException(nameof(source));
-
-			InitialDate = source.InitialDate;
-			FinalDate = source.FinalDate;
-			EnumValues = source.GetTypes() ?? throw new ArgumentNullException("Method IEnumTypeSelectable.GetTypes() can't return null.");
-
-			Initialize(source.GetData);
-		}
+		public Scopes(IScopeSource source) : this(source.GetTypes, source.GetData, source.InitialDate, source.FinalDate)
+		{ }
 
 		private void Initialize(Func<IEnumType, IEnumerable<IScopeSelectionItem>> dataProvider)
 		{

@@ -21,7 +21,7 @@ namespace Statistic
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		Scopes[] scopes = null;
+		Scopes[] scopesCollection = null;
 
 		public MainWindow()
 		{
@@ -37,16 +37,9 @@ namespace Statistic
 
 		private void DiagramSwitchButton_Click(object sender, Resources.Templates.SwitchButton.OnOffButtonClickHandlerEventArgs eventArgs)
 		{
-			if (scopes != null && scopes.Length == 1)
+			if (scopesCollection != null && scopesCollection.Length == 1)
 			{
-				if (eventArgs.State == SwitchButton.SwitchButtonState.Activated)
-				{
-					//create pieDiagram
-				}
-				else
-				{
-					//create histogram
-				}
+				InitDiagram(eventArgs.State);
 			}
 		}
 
@@ -82,17 +75,40 @@ namespace Statistic
 					DiagramsSwitchStackPanel.Visibility = items.Count() > 1 ? Visibility.Hidden : Visibility.Visible;
 			}
 			);
+
 			InitializeScopes(items, itemsAmount);
 
-			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
+			InitDiagram(DiagramSwitchButton.ButtonState);
+		}
+
+		private void InitDiagram(SwitchButton.SwitchButtonState state)
+		{
+			Dispatcher.Invoke(() =>
+			{
+				DiagramGrid.Children.Clear();
+
+				if (state == SwitchButton.SwitchButtonState.Activated)
+				{
+					var pie = new PieDiagram(scopesCollection[0], brushes);
+					DiagramGrid.Children.Add(pie);
+				}
+				else
+				{
+					var histo = new HistoDiagram(brushes, scopesCollection);
+					DiagramGrid.Children.Add(histo);
+				}
+
+				LoadingAnimation.Visibility = Visibility.Hidden;
+			}
+			);
 		}
 
 		private void InitializeScopes(IEnumerable<ValuesBunch> items, int itemsAmount)
 		{
-			scopes = new Scopes[itemsAmount];
+			scopesCollection = new Scopes[itemsAmount];
 			for (int i = 0; i < itemsAmount; i++)
 			{
-				scopes[i] = new Scopes(items.ElementAt(i));
+				scopesCollection[i] = new Scopes(items.ElementAt(i));
 			}
 		}
 

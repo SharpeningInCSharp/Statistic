@@ -60,7 +60,7 @@ namespace Model
 
 		public IEnumerable<IEnumType> GetTypes()
 		{
-			return values.Select(x => x.EnumType);
+			return values.Select(x => x.EnumType).Distinct();
 		}
 
 		public IEnumerable<IScopeSelectionItem> GetData(IEnumType enumType)
