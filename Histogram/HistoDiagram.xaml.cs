@@ -151,10 +151,10 @@ namespace Histogram
 		private void BinsBunch_StatTypeSelected(IEnumType enumType)
 		{
 			SelectAllItems(enumType);
-			OutAllData(enumType);
+			OutTypeData(enumType);
 		}
 
-		private void OutAllData(IEnumType enumType)
+		private void OutTypeData(IEnumType enumType)
 		{
 			DiagramStatInfo.Clear();
 			DiagramStatInfo.Header = enumType.Item;
