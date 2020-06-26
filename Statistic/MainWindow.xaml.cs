@@ -25,8 +25,6 @@ namespace Statistic
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			ExcelExportManager.ParsingComplete += ExcelExportManager_ParsingComplete;
 		}
 
 		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
@@ -64,66 +62,6 @@ namespace Statistic
 
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
 
-		//private void Initialize()
-		//{
-		//	var scopes1 = new Scopes(GetEnums1, GetValues1, DateTime.Today, null);
-		//	var scopes2 = new Scopes(GetEnums2, GetValues2, DateTime.Today, null);
-
-		//	var hdiagram = new HistoDiagram(brushes, scopes1, scopes2);
-		//	var pDiagram = new PieDiagram(scopes1, brushes);
-		//	DiagramGrid.Children.Add(hdiagram);
-		//}
-
-		//private IEnumerable<ValueItem> GetValues2(IEnumType enumItem, DateTime initial, DateTime? final)
-		//{
-		//	var data = new List<ValueItem>()
-		//	{
-		//		new ValueItem(26,new StatEnumItem("Jopa")),
-		//		new ValueItem(56,new StatEnumItem("Jopa")),
-		//		new ValueItem(76,new StatEnumItem("Pupa")),
-		//		new ValueItem(66,new StatEnumItem("Pupa")),
-		//		new ValueItem(96,new StatEnumItem("Lupa")),
-		//		new ValueItem(226,new StatEnumItem("Zalupa")),
-		//		new ValueItem(24,new StatEnumItem("Zalupa")),
-		//	};
-
-		//	return data.Where(x => x.EnumType.Equals(enumItem));
-		//}
-
-		//private IEnumerable<StatEnumItem> GetEnums2()
-		//{
-		//	return new List<StatEnumItem>()
-		//	{
-		//		new StatEnumItem("Jopa"),
-		//		new StatEnumItem("Pupa"),
-		//		new StatEnumItem("Lupa"),
-		//		new StatEnumItem("Zalupa"),
-		//	};
-		//}
-
-		//private IEnumerable<ValueItem> GetValues1(IEnumType enumItem, DateTime initial, DateTime? final)
-		//{
-		//	var data = new List<ValueItem>()
-		//	{
-		//		new ValueItem(16,new StatEnumItem("Jopa")),
-		//		new ValueItem(26,new StatEnumItem("Jopa")),
-		//		new ValueItem(76,new StatEnumItem("Pupa")),
-		//		new ValueItem(36,new StatEnumItem("Pupa")),
-		//		new ValueItem(96,new StatEnumItem("Lupa")),
-		//	};
-
-		//	return data.Where(x => x.EnumType.Equals(enumItem));
-		//}
-
-		//private IEnumerable<StatEnumItem> GetEnums1()
-		//{
-		//	return new List<StatEnumItem>()
-		//	{
-		//		new StatEnumItem("Jopa"),
-		//		new StatEnumItem("Pupa"),
-		//		new StatEnumItem("Lupa"),
-		//	};
-		//}
 
 		//TODO: can I do such thing - that I can drag files into
 
@@ -143,8 +81,18 @@ namespace Statistic
 			if (fileDialog.FileName.EndsWith(".xlsx"))
 			{
 				LoadingAnimation.Visibility = Visibility.Visible;
-				ExcelExportManager.ParseFileAsync(fileDialog.FileName);
+
+				var excelParser = new ExcelExportManager(fileDialog.FileName);
+				excelParser.ParsingComplete += ExcelExportManager_ParsingComplete;
+				excelParser.ParseFileAsync();
 			}
+		}
+
+		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
+		{
+			var readItems = items;
+
+			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
 		}
 
 		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)

@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,15 +10,33 @@ namespace Utils
 {
 	public class ExcelExportManager
 	{
-		public delegate void ExcelExportDelegateHandler(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items);
-		public static event ExcelExportDelegateHandler ParsingComplete;
+		public string Path { get; }
 
-		public static async void ParseFileAsync(string path)
+		public IEnumerable<ValuesBunch> Items { get; private set; }
+
+		public delegate void ExcelExportDelegateHandler(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items);
+
+		public event ExcelExportDelegateHandler ParsingComplete;
+
+		public ExcelExportManager(string path)
+		{
+			Path = path ?? throw new ArgumentNullException(nameof(path));
+
+			if (File.Exists(path) == false)
+				throw new ArgumentException($"{path} file doen't exist.");
+		}
+
+		public async void ParseFileAsync()
+		{
+			await Task.Run(() => ParseFile(Path));
+		}
+
+		public async void ParseFileAsync(string path)
 		{
 			await Task.Run(() => ParseFile(path));
 		}
 
-		private static void ParseFile(string path)
+		private void ParseFile(string path)
 		{
 			var items = new List<ValuesBunch>();
 
@@ -32,10 +51,11 @@ namespace Utils
 			catch
 			{ }
 
-			ParsingComplete?.Invoke(null, items);
+			Items = items;
+			ParsingComplete?.Invoke(this, new List<ValuesBunch>(items));
 		}
 
-		private static IEnumerable<ValuesBunch> ReadWorkSheet(IXLWorksheet worksheet)
+		private IEnumerable<ValuesBunch> ReadWorkSheet(IXLWorksheet worksheet)
 		{
 			var items = new List<ValuesBunch>();
 
@@ -85,7 +105,7 @@ namespace Utils
 			return items;
 		}
 
-		private static void InitializeFinalDate(IXLCell firstCell, IXLCell lastCell, DateTime initialDate, out DateTime? finalDate)
+		private void InitializeFinalDate(IXLCell firstCell, IXLCell lastCell, DateTime initialDate, out DateTime? finalDate)
 		{
 			if (lastCell.CachedValue.Equals(firstCell.CachedValue))
 			{
@@ -100,7 +120,7 @@ namespace Utils
 			}
 		}
 
-		private static int ParseValueItems(ValuesBunch valueItems, IXLCell currentTypeCell)
+		private int ParseValueItems(ValuesBunch valueItems, IXLCell currentTypeCell)
 		{
 			int lastRowNum = currentTypeCell.Address.RowNumber;
 			while (currentTypeCell.IsEmpty() == false)
@@ -117,7 +137,7 @@ namespace Utils
 			return lastRowNum;
 		}
 
-		private static void ParseValueItem(ValuesBunch valueItems, string type, IXLCell currentValueCell, ref int lastRowNum)
+		private void ParseValueItem(ValuesBunch valueItems, string type, IXLCell currentValueCell, ref int lastRowNum)
 		{
 			while (currentValueCell.IsEmpty() == false)
 			{
