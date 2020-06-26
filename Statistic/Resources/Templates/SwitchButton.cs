@@ -35,6 +35,14 @@ namespace Statistic.Resources.Templates
 				isActive = !isActive;
 			}
 
+			public override bool Equals(object obj)
+			{
+				if (obj is SwitchButtonState buttonState)
+					return Equals(buttonState);
+
+				return false;
+			}
+
 			public bool Equals([AllowNull] SwitchButtonState other)
 			{
 				if (other is null)
@@ -56,6 +64,11 @@ namespace Statistic.Resources.Templates
 			public static bool operator !=(SwitchButtonState left, SwitchButtonState right)
 			{
 				return !(left == right);
+			}
+
+			public override int GetHashCode()
+			{
+				return HashCode.Combine(isActive);
 			}
 		}
 
