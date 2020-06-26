@@ -143,7 +143,7 @@
                             x:Name="DiagramsSwitchStackPanel"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Center"
-                            Visibility="Hidden"
+                            Visibility="Visible"
                             Grid.Row="1"
                             Grid.Column="0">
 

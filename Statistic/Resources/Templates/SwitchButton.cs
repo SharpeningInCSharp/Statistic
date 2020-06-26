@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -8,11 +11,59 @@ namespace Statistic.Resources.Templates
 {
 	public class SwitchButton : Control
 	{
+		public class SwitchButtonState : IEquatable<SwitchButtonState>
+		{
+			/// <summary>
+			/// Right ball position
+			/// </summary>
+			public static SwitchButtonState Activated = new SwitchButtonState(true);
+
+			/// <summary>
+			/// Left ball position
+			/// </summary>
+			public static SwitchButtonState Deactivated = new SwitchButtonState(false);
+
+			private bool isActive = false;
+
+			private SwitchButtonState(bool isActive)
+			{
+				this.isActive = isActive;
+			}
+
+			public void Reverse()
+			{
+				isActive = !isActive;
+			}
+
+			public bool Equals([AllowNull] SwitchButtonState other)
+			{
+				if (other is null)
+					return false;
+
+				return isActive == other.isActive;
+			}
+
+			public static implicit operator bool(SwitchButtonState buttonState)
+			{
+				return buttonState.isActive;
+			}
+
+			public static bool operator ==(SwitchButtonState left, SwitchButtonState right)
+			{
+				return left.Equals(right);
+			}
+
+			public static bool operator !=(SwitchButtonState left, SwitchButtonState right)
+			{
+				return !(left == right);
+			}
+		}
+
 		public class OnOffButtonClickHandlerEventArgs
 		{
-			public bool State { get; }
+			public SwitchButtonState State { get; }
 
-			public OnOffButtonClickHandlerEventArgs(bool state)
+			public OnOffButtonClickHandlerEventArgs(SwitchButtonState state)
 			{
 				State = state;
 			}
@@ -22,8 +73,17 @@ namespace Statistic.Resources.Templates
 		public delegate void OnOffButtonClickHandler(object sender, OnOffButtonClickHandlerEventArgs eventArgs);
 		public event OnOffButtonClickHandler Click;
 
+		private SwitchButtonState buttonState = SwitchButtonState.Deactivated;
 
-		public bool IsActivated { get; private set; } = false;
+		public SwitchButtonState ButtonState
+		{
+			get => buttonState;
+			set
+			{
+				buttonState = value;
+				ApplyState();
+			}
+		}
 
 		public Brush ActiveBrush { get; set; } = new SolidColorBrush(Color.FromArgb(255, 31, 209, 161));   //#FF1FD1A1  
 
@@ -80,11 +140,9 @@ namespace Statistic.Resources.Templates
 			ChangeState();
 		}
 
-		private void ChangeState()
+		private void ApplyState()
 		{
-			IsActivated = !IsActivated;
-
-			if (IsActivated)
+			if (ButtonState)
 			{
 				ToActivePosition();
 			}
@@ -92,8 +150,15 @@ namespace Statistic.Resources.Templates
 			{
 				ToInactivePosition();
 			}
+		}
 
-			Click?.Invoke(this, new OnOffButtonClickHandlerEventArgs(IsActivated));
+		private void ChangeState()
+		{
+			ButtonState.Reverse();
+
+			ApplyState();
+
+			Click?.Invoke(this, new OnOffButtonClickHandlerEventArgs(ButtonState));
 		}
 	}
 }

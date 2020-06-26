@@ -12,6 +12,7 @@ using Statistic.AdditionalWindows;
 using Microsoft.Win32;
 using Utils;
 using DocumentFormat.OpenXml.Office.CustomUI;
+using Statistic.Resources.Templates;
 
 namespace Statistic
 {
@@ -38,9 +39,13 @@ namespace Statistic
 		{
 			if (scopes != null && scopes.Length == 1)
 			{
-				if (eventArgs.State)
+				if (eventArgs.State == SwitchButton.SwitchButtonState.Activated)
 				{
-
+					//create pieDiagram
+				}
+				else
+				{
+					//create histogram
 				}
 			}
 		}
