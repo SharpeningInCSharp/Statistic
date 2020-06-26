@@ -204,7 +204,7 @@
                            Style="{StaticResource TitleTextBlock}"/>
 
                 <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"
-                       Margin="0,0,4,4"/>
+                       Margin="0,0,5,5"/>
 
             </Grid>
 
