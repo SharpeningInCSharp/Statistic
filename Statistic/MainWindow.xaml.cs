@@ -1,5 +1,4 @@
 ﻿using Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -11,7 +10,6 @@ using PieDiagramControls;
 using Statistic.AdditionalWindows;
 using Microsoft.Win32;
 using Utils;
-using DocumentFormat.OpenXml.Office.CustomUI;
 using Statistic.Resources.Templates;
 
 namespace Statistic
@@ -137,6 +135,12 @@ namespace Statistic
 		private void MainGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			DragMove();
+		}
+
+		private void FullScreenWindowButton_Click(object sender, RoutedEventArgs e)
+		{
+			Top = 0;
+			Left = 0;
 		}
 		#endregion
 	}

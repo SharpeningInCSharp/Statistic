@@ -103,23 +103,33 @@ namespace PieDiagramControls
 
 		private void ShowGeneralInfo()
 		{
-			piePieceHeaderTextBlock.Text = "General info";
-
-			//TODO: edit DiagramInfo interraction - set new Header FontSize and remove piePieceHeaderTextBlock also udopt to new output view (like as HistoDiagram)
 			DiagramInfo.Clear();
-			DiagramInfo.Header = Scopes.TotalSum.ToString("C2");
-			Scopes.OutputData((col1, col2) => DiagramInfo.Add(col1, col2));
+			DiagramInfo.Header = "General info";
+			foreach (var item in Scopes)
+			{
+				DiagramInfo.Add(item.EnumMember.ToString(), DiagramStatInfo.ColumnType.Data);
+				DiagramInfo.Add(item.Sum.ToString("f2"), item.Ratio.ToString("p2"));
+			}
+
+			DiagramInfo.Add($"Total: {Scopes.TotalSum:f2}", DiagramStatInfo.ColumnType.Data);
+			DiagramInfo.Add($"Average: {Scopes.Average(x => x.Sum):f2}", DiagramStatInfo.ColumnType.Data);
 		}
 
 		private void PiePiece_MouseIn(PiePiece sender)
 		{
 			Panel.SetZIndex(sender, ElementToForegroundIndex);
 			var curScope = Scopes[sender.EnumType];
-			piePieceHeaderTextBlock.Text = $"{curScope.EnumMember}";
 
 			DiagramInfo.Clear();
-			DiagramInfo.Header = $"{curScope.Sum:C2} ({curScope.Ratio: #0.##%})";
-			curScope.OutputData((col1, col2) => DiagramInfo.Add(col1, col2));
+			DiagramInfo.Header = curScope.EnumMember.ToString();
+
+			foreach (var item in curScope)
+			{
+				DiagramInfo.Add(item.GetTotal.ToString("f2"), (item.GetTotal / curScope.Sum).ToString("p2"));
+			}
+
+			DiagramInfo.Add($"Total: {curScope.Sum:f2}", DiagramStatInfo.ColumnType.Data);
+			DiagramInfo.Add($"Average: {curScope.Average(x => x.GetTotal):f2}", (curScope.Sum / Scopes.TotalSum).ToString("p2"));
 		}
 
 		//TODO: mb solve bug with 100% piePiece initialization

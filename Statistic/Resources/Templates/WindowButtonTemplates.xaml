@@ -204,4 +204,11 @@
         </Setter>
     </Style>
 
+    <Style x:Key="TitleTextBlock" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="12,4,12,4"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
 </ResourceDictionary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +49,7 @@ namespace DiagramsModel
 		}
 	}
 
-	public partial class Scope : IMaxMinDiagramStat, IPairOutputStringData
+	public partial class Scope : IMaxMinDiagramStat, IPairOutputStringData, IEnumerable<IScopeSelectionItem>
 	{
 		public decimal Min => Items.Min(x => x.GetTotal);
 
@@ -67,8 +68,18 @@ namespace DiagramsModel
 		{
 			foreach (var item in Items)
 			{
-				OutputHandler?.Invoke(item.ToString(), item.GetTotal.ToString("C2"/*,CultureInfo.CreateSpecificCulture()*/));
+				OutputHandler?.Invoke(item.GetTotal.ToString("f2"), "");
 			}
+		}
+
+		public IEnumerator<IScopeSelectionItem> GetEnumerator()
+		{
+			return Items.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return Items.GetEnumerator();
 		}
 	}
 }
