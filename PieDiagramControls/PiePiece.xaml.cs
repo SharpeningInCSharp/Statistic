@@ -26,7 +26,6 @@ namespace PieDiagramControls
 			}
 		}
 
-		//TODO: refactor
 		private Brush defaultBrush;
 		public Brush DefaultBrush
 		{
@@ -46,11 +45,6 @@ namespace PieDiagramControls
 		private const double factor = Math.PI / 180;
 
 		private const double R = 200;
-
-		//public PiePiece()
-		//{
-		//	InitializeComponent();
-		//}
 
 		public PiePiece(IEnumType enumType, double angle, Brush brush)
 		{

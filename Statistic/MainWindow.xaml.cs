@@ -27,47 +27,22 @@ namespace Statistic
 			InitializeComponent();
 		}
 
-		private void ExcelExportManager_ParsingComplete(ExcelExportManager exportManager, IEnumerable<ValuesBunch> items)
-		{
-			var readItems = items;
-
-			var itemsAmount = items.Count();
-
-			Dispatcher.Invoke(() =>
-			{
-				if (itemsAmount == 0)
-					MessageBox.Show("File is empty and bla-bla-bla... so, read info!");
-				else
-					DiagramsSwitchStackPanel.Visibility = items.Count() > 1 ? Visibility.Hidden : Visibility.Visible;
-			}
-			);
-			InitializeScopes(items, itemsAmount);
-
-			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
-		}
-
-		private void InitializeScopes(IEnumerable<ValuesBunch> items, int itemsAmount)
-		{
-			scopes = new Scopes[itemsAmount];
-			for (int i = 0; i < itemsAmount; i++)
-			{
-				//items.ElementAt(i)
-				//scopes[i] = new Scopes();
-			}
-		}
-
 		//TODO: create special util for color generation
 		//TODO: extract common from diagrams
-		//TODO: should I extend IScopeSelectionItem interface or create some other with DateTime
 
 		private Brush[] brushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Brown, Brushes.Chartreuse, Brushes.Purple };
-
 
 		//TODO: can I do such thing - that I can drag files into
 
 		private void DiagramSwitchButton_Click(object sender, Resources.Templates.SwitchButton.OnOffButtonClickHandlerEventArgs eventArgs)
 		{
+			if (scopes != null && scopes.Length == 1)
+			{
+				if (eventArgs.State)
+				{
 
+				}
+			}
 		}
 
 		private void UploadFileButton_Click(object sender, RoutedEventArgs e)
@@ -92,7 +67,28 @@ namespace Statistic
 		{
 			var readItems = items;
 
+			var itemsAmount = items.Count();
+
+			Dispatcher.Invoke(() =>
+			{
+				if (itemsAmount == 0)
+					MessageBox.Show("File is empty and bla-bla-bla... so, read info!");
+				else
+					DiagramsSwitchStackPanel.Visibility = items.Count() > 1 ? Visibility.Hidden : Visibility.Visible;
+			}
+			);
+			InitializeScopes(items, itemsAmount);
+
 			Dispatcher.Invoke(() => LoadingAnimation.Visibility = Visibility.Hidden);
+		}
+
+		private void InitializeScopes(IEnumerable<ValuesBunch> items, int itemsAmount)
+		{
+			scopes = new Scopes[itemsAmount];
+			for (int i = 0; i < itemsAmount; i++)
+			{
+				scopes[i] = new Scopes(items.ElementAt(i));
+			}
 		}
 
 		private void AppInfo_Executed(object sender, ExecutedRoutedEventArgs e)
