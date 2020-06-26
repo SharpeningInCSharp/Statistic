@@ -3,11 +3,108 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cmd="clr-namespace:Statistic.Commands"
         xmlns:local="clr-namespace:Statistic.AdditionalWindows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="AppInfoWindow" Height="450" Width="800">
-    <Grid>
-        <TextBlock FontSize="40" Text="Hi there"/>
-    </Grid>
+        Title="Info" 
+        MinHeight="470" MinWidth="600"
+        Height="500" Width="600">
+    <Window.Resources>
+
+        <Style x:Key="SampleImage" TargetType="Image">
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+
+        <Style x:Key="ImportantMessageTextBlock" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="FontWeight" Value="ExtraBlack"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="MessageTextBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="6,2,6,2"/>
+        </Style>
+
+        <Style x:Key="EnumItemTextBlock" TargetType="TextBlock"
+               BasedOn="{StaticResource MessageTextBlock}">
+            <Setter Property="Margin" Value="20,2,6,2"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.OpenSample" Executed="OpenSample_Executed"/>
+    </Window.CommandBindings>
+    
+    <StackPanel Orientation="Vertical"
+                Background="#FFB9A668">
+        <TextBlock Text="Statistics app" Style="{StaticResource HeaderTextBlock}"/>
+
+        <TextBlock Style="{StaticResource MessageTextBlock}">
+            Using this wonderful modern application you can <Italic>independently</Italic> analyze some statistics info.
+        </TextBlock>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource MessageTextBlock}"
+                   Margin="6,10,6,2">
+            <Italic>To start</Italic> using this app 
+                
+                just click Choose <LineBreak/> button and choose required one.
+            </TextBlock>
+            <Image Source="pack://application:,,,/Resources/UploadFileIcon.png"
+                   Style="{StaticResource SampleImage}"/>
+        </StackPanel>
+
+
+        <TextBlock Text="Selecting file must follow some rules:"
+                   Style="{StaticResource MessageTextBlock}"/>
+        
+        <TextBlock Text="1. Date determines new bunch of items;"
+                   Style="{StaticResource EnumItemTextBlock}"/>
+        <TextBlock Text="2. Do not separate types from bunch;"
+                   Style="{StaticResource EnumItemTextBlock}"/>
+        <TextBlock Text="3. Do not separate type items from each other;"
+                   Style="{StaticResource EnumItemTextBlock}"/>
+        <TextBlock Text="4. Do not separate value items from it's type;"
+                   Style="{StaticResource EnumItemTextBlock}"/>
+
+        <TextBlock Style="{StaticResource MessageTextBlock}">
+            Still have <Italic>problems?</Italic> <Hyperlink Command="cmd:AppCommands.OpenSample">Check sample</Hyperlink>
+        </TextBlock>
+
+        <TextBlock Text="!Please notice, app can work only with positive numbers!"
+                   Style="{StaticResource ImportantMessageTextBlock}"/>
+
+        <TextBlock Style="{StaticResource MessageTextBlock}">
+            Statistic can be displayed by <Italic>Histogram</Italic> or <Italic> Pie diagram</Italic>
+        </TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource MessageTextBlock}"><Run Text="You can toggle diagrams,"/><LineBreak/><Run Text="using special button"/></TextBlock>
+
+            <Image Source="pack://application:,,,/Resources/ToggleButtonSample.png"
+                   Style="{StaticResource SampleImage}"/>
+
+        </StackPanel>
+
+        <TextBlock Text="!Please notice, button's unavailable if data contains several scopes!"
+                   Style="{StaticResource ImportantMessageTextBlock}"/>
+        <TextBlock Style="{StaticResource MessageTextBlock}">
+            Thus you can use <Italic>Histogram only</Italic>
+        </TextBlock>
+
+    </StackPanel>
 </Window>

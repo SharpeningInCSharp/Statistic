@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Statistic.Commands
 {
@@ -7,8 +8,11 @@ namespace Statistic.Commands
 		static AppCommands()
 		{
 			ShowInfo = new RoutedCommand("ShowInfo", typeof(MainWindow));
+			OpenSample = new RoutedCommand("OpenSample", typeof(Window));
 		}
 
 		public static RoutedCommand ShowInfo { get; set; }
+
+		public static RoutedCommand OpenSample { get; set; }
 	}
 }
