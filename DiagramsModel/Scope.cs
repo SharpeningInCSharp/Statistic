@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace DiagramsModel
 {
+	/// <summary>
+	/// An abstraction of statistic item
+	/// </summary>
 	public partial class Scope
 	{
 		public decimal Sum => Items.Sum(x => x.GetTotal);
 
 		public double Ratio { get; internal set; } = 0;
 
-		public IEnumType EnumMember { get; internal set; }
+		public IEnumType EnumMember { get; }
 
 		private IEnumerable<IScopeSelectionItem> Items { get; }
 
@@ -20,6 +23,16 @@ namespace DiagramsModel
 
 		internal Scope(IEnumerable<IScopeSelectionItem> items, DateTime dateTime)
 		{
+			if (items is null)
+				throw new ArgumentNullException(nameof(items));
+
+			if (items.Count() < 1)
+				throw new ArgumentException($"{nameof(items)} collection can't be empty.");
+
+			if (items.Select(x => x.EnumType).Distinct().Count() > 1)
+				throw new ArgumentException($"{nameof(items)} collection must contain the same {typeof(IEnumType)} for each item.");
+
+			EnumMember = items.First().EnumType;
 			Items = items;
 			InitialDate = dateTime;
 		}
@@ -37,7 +50,7 @@ namespace DiagramsModel
 
 	public partial class Scope : IMaxMinDiagramStat, IPairOutputStringData
 	{
-		public decimal Min => Items.Min(x=>x.GetTotal);
+		public decimal Min => Items.Min(x => x.GetTotal);
 
 		public decimal Max => Items.Max(x => x.GetTotal);
 

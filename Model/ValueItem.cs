@@ -6,7 +6,6 @@ namespace Model
 {
 	public partial class ValueItem
 	{
-		//TODO: need to store date somewhere/ Probably, I should use one mode class as conteiner of curtain type items
 		public ValueItem(decimal value, StatEnumItem statEnum)
 		{
 			if (DataValidation.IsValueValid(value) == false)
@@ -34,7 +33,7 @@ namespace Model
 
 		public override string ToString()
 		{
-			return GetTotal.ToString();
+			return $"{EnumType} {GetTotal:0#.##}";
 		}
 
 		public static bool operator ==(ValueItem item1, ValueItem item2)

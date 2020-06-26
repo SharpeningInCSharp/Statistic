@@ -5,26 +5,38 @@ using System.Linq;
 
 namespace DiagramsModel
 {
+	/// <summary>
+	/// An abstraction to work with statistic group of items - <see cref="Scope"/>
+	/// </summary>
 	public partial class Scopes
 	{
 		public int Count => EnumValues.Count();
+
 		public bool IsEmpty => TotalSum == 0;
-		public DateTime InitialDate { get; }
-		public DateTime? FinalDate { get; }
+
 		public IEnumerable<IEnumType> EnumValues { get; }
+
 		public decimal TotalSum => scopes.Sum(x => x.Sum);
+
 		public int NotEmptyScopesAmount => scopes.Count() - scopes.Count(x => x.Sum == 0);
 
 		private readonly List<Scope> scopes = new List<Scope>();
 
 		/// <summary>
-		/// Scope for range of dates
+		/// You should use that ctor to get data using date.
 		/// </summary>
-		/// <param name="dataProvider">Provides a way to get data according to curtain IEnumType and Dates range</param>
-		/// <param name="initialDate">Start of Date range</param>
-		/// <param name="finalDate">End of Date range</param>
+		/// <param name="typesProvider">Provides a way to get all range of types <see cref="IEnumType"/></param>
+		/// <param name="dataProvider">Provides a way to get data according to curtain <see cref="IEnumType"/> and Dates range</param>
+		/// <param name="initialDate">Start of date range</param>
+		/// <param name="finalDate">End of date range</param>
 		public Scopes(Func<IEnumerable<IEnumType>> typesProvider, Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider, DateTime initialDate, DateTime? finalDate)
 		{
+			if (typesProvider is null)
+				throw new ArgumentNullException(nameof(typesProvider));
+
+			if (dataProvider is null)
+				throw new ArgumentNullException(nameof(dataProvider));
+
 			InitialDate = initialDate;
 			FinalDate = finalDate;
 
@@ -32,27 +44,90 @@ namespace DiagramsModel
 			Initialize(dataProvider);
 		}
 
+		/// <summary>
+		/// According to <paramref name="dataProvider"/>, using that ctor you can get data without dates
+		/// </summary>
+		/// <param name="typesProvider">Provides a way to get all range of types <see cref="IEnumType"/></param>
+		/// <param name="dataProvider">Provides a way to get data according to curtain <see cref="IEnumType"/> without any dates</param>
+		/// <param name="initialDate">Initial date of the date range</param>
+		/// <param name="finalDate">Final date of the date range (is null if equals <paramref name="initialDate"/>)</param>
+		public Scopes(Func<IEnumerable<IEnumType>> typesProvider, Func<IEnumType, IEnumerable<IScopeSelectionItem>> dataProvider, DateTime initialDate, DateTime? finalDate)
+		{
+			if (typesProvider is null)
+				throw new ArgumentNullException(nameof(typesProvider));
+
+			if (dataProvider is null)
+				throw new ArgumentNullException(nameof(dataProvider));
+
+			InitialDate = initialDate;
+			FinalDate = finalDate;
+
+			EnumValues = typesProvider.Invoke() ?? throw new ArgumentNullException($"{nameof(typesProvider)} can't return null.");
+			Initialize(dataProvider);
+		}
+
+		/// <summary>
+		/// Creates object using <paramref name="source"/>
+		/// </summary>
+		/// <param name="source">Object with implemented <see cref="IScopeSource"/></param>
+		public Scopes(IScopeSource source)
+		{
+			if (source is null)
+				throw new ArgumentNullException(nameof(source));
+
+			InitialDate = source.InitialDate;
+			FinalDate = source.FinalDate;
+			EnumValues = source.GetTypes() ?? throw new ArgumentNullException("Method IEnumTypeSelectable.GetTypes() can't return null.");
+
+			Initialize(source.GetData);
+		}
+
+		private void Initialize(Func<IEnumType, IEnumerable<IScopeSelectionItem>> dataProvider)
+		{
+			foreach (var value in EnumValues)
+			{
+				var result = dataProvider.Invoke(value);
+
+				OnScopeAddition(result);
+			}
+
+			if (IsEmpty == false)
+				SetPerCents();
+		}
+
 		private void Initialize(Func<IEnumType, DateTime, DateTime?, IEnumerable<IScopeSelectionItem>> dataProvider)
 		{
 			foreach (var value in EnumValues)
 			{
 				var result = dataProvider.Invoke(value, InitialDate, FinalDate);
-				Scope scope;
-				if (FinalDate.HasValue)
-				{
-					scope = new Scope(result, InitialDate, FinalDate.Value);
-				}
-				else
-				{
-					scope = new Scope(result, InitialDate);
-				}
 
-				scope.EnumMember = value;
-				scopes.Add(scope);
+				OnScopeAddition(result);
 			}
 
 			if (IsEmpty == false)
 				SetPerCents();
+		}
+
+		private void OnScopeAddition(IEnumerable<IScopeSelectionItem> result)
+		{
+			if (result != null)
+			{
+				InitScope(result, out Scope scope);
+
+				scopes.Add(scope);
+			}
+		}
+
+		private void InitScope(IEnumerable<IScopeSelectionItem> result, out Scope scope)
+		{
+			if (FinalDate.HasValue)
+			{
+				scope = new Scope(result, InitialDate, FinalDate.Value);
+			}
+			else
+			{
+				scope = new Scope(result, InitialDate);
+			}
 		}
 
 		private void SetPerCents()
@@ -76,8 +151,12 @@ namespace DiagramsModel
 		}
 	}
 
-	public partial class Scopes: IEnumerable<Scope>, IEnumerable, IPairOutputStringData
+	public partial class Scopes : IEnumerable<Scope>, IEnumerable, IPairOutputStringData, IDatesRange
 	{
+		public DateTime InitialDate { get; }
+
+		public DateTime? FinalDate { get; }
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return scopes.GetEnumerator();

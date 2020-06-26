@@ -12,16 +12,6 @@ namespace Model
 	public partial class ValuesBunch
 	{
 		/// <summary>
-		/// Initial date of range
-		/// </summary>
-		public DateTime InitialDate { get; }
-
-		/// <summary>
-		/// Final date of range. Is null if range constist from a single date
-		/// </summary>
-		public DateTime? FinalDate { get; }
-
-		/// <summary>
 		/// Amount of statistic items
 		/// </summary>
 		public int Count => values.Count;
@@ -49,36 +39,35 @@ namespace Model
 			FinalDate = finalDate;
 		}
 
-		//TODO: ExtractInterface
-		public IEnumerable<IEnumType> GetTypes()
-		{
-			return values.Select(x => x.EnumType);
-		}
-
-		public IEnumerable<IScopeSelectionItem> GetData(IEnumType enumType, DateTime initialDate, DateTime? finalDate)
-		{
-			//TODO: what about DateTime
-			if(finalDate.HasValue)
-			{
-				return values.Where(x => x.EnumType == enumType);
-			}
-			else
-			{
-				return values.Where(x => x.EnumType == enumType);
-			}
-		}
-
 		public void Add(ValueItem item)
 		{
 			if (item != null)
 				values.Add(item);
 		}
-
 	}
 
-	//TODO: should I add one more alternative ctor to Scopes, which takes some interfaced item
-	public partial class ValuesBunch : IEnumerable<ValueItem>
+	public partial class ValuesBunch : IEnumerable<ValueItem>, IScopeSource
 	{
+		/// <summary>
+		/// Initial date of range
+		/// </summary>
+		public DateTime InitialDate { get; }
+
+		/// <summary>
+		/// Final date of range. Is null if range constist from a single date
+		/// </summary>
+		public DateTime? FinalDate { get; }
+
+		public IEnumerable<IEnumType> GetTypes()
+		{
+			return values.Select(x => x.EnumType);
+		}
+
+		public IEnumerable<IScopeSelectionItem> GetData(IEnumType enumType)
+		{
+			return values.Where(x => x.EnumType == enumType);
+		}
+
 		public ValueItem this[int ind]
 		{
 			get
