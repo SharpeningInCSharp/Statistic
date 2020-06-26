@@ -134,13 +134,27 @@ namespace Statistic
 
 		private void MainGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			if (WindowState == WindowState.Maximized)
+			{
+				WindowState = WindowState.Normal;
+				Height = 1056;
+				Width = 1936;
+			}
+
 			DragMove();
 		}
 
 		private void FullScreenWindowButton_Click(object sender, RoutedEventArgs e)
 		{
-			Top = 0;
-			Left = 0;
+			if (WindowState == WindowState.Maximized)
+			{
+				WindowState = WindowState.Normal;
+				Height = 1056;
+				Width = 1936;
+			}
+
+			Top = -6;
+			Left = -6;
 		}
 		#endregion
 	}
