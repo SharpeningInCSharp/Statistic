@@ -65,7 +65,7 @@ namespace Model
 
 		public IEnumerable<IScopeSelectionItem> GetData(IEnumType enumType)
 		{
-			return values.Where(x => x.EnumType == enumType);
+			return values.Where(x => x.EnumType.Equals(enumType));
 		}
 
 		public ValueItem this[int ind]

@@ -18,6 +18,8 @@ namespace Utils
 
 		public event ExcelExportDelegateHandler ParsingComplete;
 
+		private object locker = new object();
+
 		public ExcelExportManager(string path)
 		{
 			Path = path ?? throw new ArgumentNullException(nameof(path));
@@ -31,28 +33,26 @@ namespace Utils
 			await Task.Run(() => ParseFile(Path));
 		}
 
-		public async void ParseFileAsync(string path)
-		{
-			await Task.Run(() => ParseFile(path));
-		}
-
 		private void ParseFile(string path)
 		{
-			var items = new List<ValuesBunch>();
-
-			try
+			lock(locker)
 			{
-				using var wb = new XLWorkbook(path);
-				foreach (var sheet in wb.Worksheets)
-				{
-					items.AddRange(ReadWorkSheet(sheet));
-				}
-			}
-			catch
-			{ }
+				var items = new List<ValuesBunch>();
 
-			Items = items;
-			ParsingComplete?.Invoke(this, new List<ValuesBunch>(items));
+				try
+				{
+					using var wb = new XLWorkbook(path);
+					foreach (var sheet in wb.Worksheets)
+					{
+						items.AddRange(ReadWorkSheet(sheet));
+					}
+				}
+				catch
+				{ }
+
+				Items = items;
+				ParsingComplete?.Invoke(this, new List<ValuesBunch>(items));
+			}
 		}
 
 		private IEnumerable<ValuesBunch> ReadWorkSheet(IXLWorksheet worksheet)
