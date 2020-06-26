@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <None Remove="Resources\GradientBackgroundImage.png" />
+    <None Remove="Resources\StatisticIcon.png" />
     <None Remove="Resources\UploadFileIcon.png" />
   </ItemGroup>
 
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\GradientBackgroundImage.png" />
+    <Resource Include="Resources\StatisticIcon.png" />
     <Resource Include="Resources\UploadFileIcon.png" />
   </ItemGroup>
 

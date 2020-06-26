@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl ="clr-namespace:Statistic.Resources.Templates"
         xmlns:cmd="clr-namespace:Statistic.Commands"
-        xmlns:local="clr-namespace:Statistic"
         mc:Ignorable="d"
         WindowStyle="None"
+        Icon="pack://application:,,,/Resources/StatisticIcon.png"
         WindowStartupLocation="CenterScreen"
-        Title="StatManager" 
+        Title="Statistic" 
         Height="1056" Width="1936">
     <Window.Resources>
 
@@ -170,31 +170,41 @@
 
             <!--Window managment-->
             <Grid Grid.Column="2"
-              Margin="15"
+              Margin="15,0,20,0"
               VerticalAlignment="Top"
               HorizontalAlignment="Right">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="55"/>
                     <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="55"/>
                     <ColumnDefinition Width="55"/>
                 </Grid.ColumnDefinitions>
 
                 <!--ToolTip="Collapse"-->
                 <Button x:Name="CollapseWindowButton"
-                    Grid.Column="0"
+                    Grid.Column="2"
                     Style="{StaticResource WindowCollapseButton}"
                     Click="CollapseWindowButton_Click"/>
 
                 <Button x:Name="FullScreenWindowButton"
-                    Grid.Column="1"
-                    Style="{StaticResource WindowMaximizedButton}"/>
+                        Click="FullScreenWindowButton_Click"
+                        Grid.Column="3"
+                        Style="{StaticResource WindowMaximizedButton}"/>
 
                 <Button x:Name="CloseWindowButton"
                     Click="CloseWindowButton_Click"
-                    Grid.Column="2"
+                    Grid.Column="4"
                     Style="{StaticResource WindowExitButton}"
                     ToolTip="Close"/>
+
+                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}"
+                           Grid.Column="1"
+                           Style="{StaticResource TitleTextBlock}"/>
+
+                <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Icon}"
+                       Margin="0,0,4,4"/>
 
             </Grid>
 
