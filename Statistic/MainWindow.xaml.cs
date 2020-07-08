@@ -19,6 +19,8 @@ namespace Statistic
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private const int DisplayHeight = 1056;
+		private const int DisplayWidth = 1936;
 		Scopes[] scopesCollection = null;
 
 		public MainWindow()
@@ -137,8 +139,8 @@ namespace Statistic
 			if (WindowState == WindowState.Maximized)
 			{
 				WindowState = WindowState.Normal;
-				Height = 1056;
-				Width = 1936;
+				Height = DisplayHeight;
+				Width = DisplayWidth;
 			}
 
 			DragMove();
@@ -149,8 +151,8 @@ namespace Statistic
 			if (WindowState == WindowState.Maximized)
 			{
 				WindowState = WindowState.Normal;
-				Height = 1056;
-				Width = 1936;
+				Height = DisplayHeight;
+				Width = DisplayWidth;
 			}
 
 			Top = -6;
